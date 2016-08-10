@@ -1,0 +1,14 @@
+.simple_faq_section_menu_content_pane {
+    -webkit-columns: 2 350px;
+    -moz-columns: 2 350px;
+    columns: 2 350px;
+    -webkit-column-gap: 2em;
+    -moz-column-gap: 2em;
+    column-gap: 2em;
+}
+
+.simple_faq_category_block {
+    -webkit-column-break-inside: avoid; /* Chrome, Safari, Opera */
+    page-break-inside: avoid; /* Firefox */
+    break-inside: avoid; /* IE 10+ */
+}

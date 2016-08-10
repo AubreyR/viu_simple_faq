@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for VIU Testimonial Module.
+ */
+
+/**
+ * Implements hook_disable().
+ */
+function viu_simple_faq_disable() {
+  cache_clear_all('*', 'cache', TRUE);
+}
+
+/**
+ * Implements hook_enable().
+ */
+function viu_simple_faq_enable() {
+  //Auto enable feature reversion
+  features_revert_module('viu_simple_faq');
+  cache_clear_all('*', 'cache', TRUE);
+}

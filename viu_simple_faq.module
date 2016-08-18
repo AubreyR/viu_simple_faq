@@ -16,18 +16,6 @@ function viu_simple_faq_views_api_alter(&$apis) {
   }
 }
 
-/**
- * Implements hook_panels_pane_content_alter().
- */
-function viu_simple_faq_panels_pane_content_alter($content, $pane, $args, $contexts) {
-  //if ($pane->subtype == 'simple_faq_views-panel_pane_1') {
-    //dpm($pane);
-    //dpm($content);
-    //dpm($args);
-    //dpm($contexts);
-  //}
-}
-
 function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
   if ($vars['title'] == "FAQ Categories") {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];

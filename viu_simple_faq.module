@@ -6,7 +6,8 @@
 
 include_once 'viu_simple_faq.features.inc';
 
-/** Implements hook_views_api_alter()
+/**
+ * Implements hook_views_api_alter()
  *
  * Views api is specified by features but we want to add the template directory.
  */
@@ -16,8 +17,24 @@ function viu_simple_faq_views_api_alter(&$apis) {
   }
 }
 
+/**
+ * Implements hook_preprocess_HOOK
+ *
+ * We want to override the panels_bootstrap_pane hook and inject some HTML (for the fa-icon)
+ */
 function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
   if ($vars['title'] == "FAQ Categories") {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];
   }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function viu_simple_faq_menu() {
+  $items = array();
+
+  $items['node/%node/manage_FAQ'] = array(
+    'title' => t('Manage FAQ Section'),
+  );
 }

@@ -27,3 +27,62 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];
   }
 }
+
+/**
+ * Implements hook_form_alter().
+ */
+function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == "oa_section_node_form" && $form['#node_edit_form']) {
+    sdpm($form);
+    sdpm($form_state);
+    //dpm($form_id);
+    //sdpm($form_state['node']);
+    $section_term_id = $form_state['node']->field_oa_section['und']['0']['tid'];
+    $taxonomy = taxonomy_term_load($section_term_id);
+    //dpm($taxonomy);
+    //WORKING HERE
+  }
+}
+
+/**
+ * Helper function
+ *
+ * Assumes Drupal 7.14 or later (for second parameter of taxonomy_get_term_by_name).
+ */
+function my_feature_safe_add_terms($term_names, $vocabulary_name, $vocabulary_machine_name) {
+  //  Make sure the vocabulary exists.  This won't apply all desired options
+  //  (description, etc.) but that's okay.  Features will do that later.  
+  //  For now, we just need somewhere to stuff the terms.
+  $vocab = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
+  if ($vocab === FALSE) {
+    $vocab = (object)array('name' => $vocabulary_name,
+      'machine_name' => $vocabulary_machine_name);
+    $vocab = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
+  }
+
+  if (is_object($vocab) && property_exists($vocab, 'vid') && $vocab->vid > 0) {
+    //  Load each term.
+    foreach ($term_names as $term_name) {
+      $term = taxonomy_get_term_by_name($term_name, $vocabulary_machine_name);
+      if (count($term) == 0) {
+        $term = (object)array('name' => $term_name,
+          'vid' => $vocab->vid);
+        taxonomy_term_save($term);
+      }
+    }
+  }
+}
+
+
+/**
+ * Insert your relevant comment here.
+ */
+function my_feature_update_7004() {
+  $term_names = array(
+    'Term One',
+    'Term Two',
+  );
+  my_feature_safe_add_terms($term_names, 'Vocab Name', 'vocab_machine_name');
+
+  //  Do the same thing with additional vocabs.
+}

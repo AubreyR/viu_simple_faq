@@ -27,14 +27,3 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];
   }
 }
-
-/**
- * Implements hook_menu().
- */
-function viu_simple_faq_menu() {
-  $items = array();
-
-  $items['node/%node/manage_FAQ'] = array(
-    'title' => t('Manage FAQ Section'),
-  );
-}

@@ -10,19 +10,10 @@
 function viu_simple_faq_defaultconfig_features() {
   return array(
     'viu_simple_faq' => array(
-      'panelizer_defaults' => 'panelizer_defaults',
       'strongarm' => 'strongarm',
+      'user_default_permissions' => 'user_default_permissions',
     ),
   );
-}
-
-/**
- * Implements hook_defaultconfig_panelizer_defaults().
- */
-function viu_simple_faq_defaultconfig_panelizer_defaults() {
-  $export = array();
-
-  return $export;
 }
 
 /**
@@ -75,4 +66,34 @@ function viu_simple_faq_defaultconfig_strongarm() {
   $export['panelizer_defaults_taxonomy_term_faq_categories'] = $strongarm;
 
   return $export;
+}
+
+/**
+ * Implements hook_defaultconfig_user_default_permissions().
+ */
+function viu_simple_faq_defaultconfig_user_default_permissions() {
+  $permissions = array();
+
+  // Exported permission: 'administer panelizer taxonomy_term faq_categories defaults'.
+  $permissions['administer panelizer taxonomy_term faq_categories defaults'] = array(
+    'name' => 'administer panelizer taxonomy_term faq_categories defaults',
+    'roles' => array(),
+    'module' => 'panelizer',
+  );
+
+  // Exported permission: 'delete terms in faq_categories'.
+  $permissions['delete terms in faq_categories'] = array(
+    'name' => 'delete terms in faq_categories',
+    'roles' => array(),
+    'module' => 'taxonomy',
+  );
+
+  // Exported permission: 'edit terms in faq_categories'.
+  $permissions['edit terms in faq_categories'] = array(
+    'name' => 'edit terms in faq_categories',
+    'roles' => array(),
+    'module' => 'taxonomy',
+  );
+
+  return $permissions;
 }

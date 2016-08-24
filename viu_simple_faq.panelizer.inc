@@ -65,7 +65,7 @@ function viu_simple_faq_panelizer_defaults() {
     'panels_breadcrumbs_home' => 1,
   );
   $display = new panels_display();
-  $display->layout = 'radix_bryant';
+  $display->layout = 'viu_radix_bryant_brenham_hybrid_flipped';
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
@@ -156,36 +156,6 @@ function viu_simple_faq_panelizer_defaults() {
   $display->content = array();
   $display->panels = array();
   $pane = new stdClass();
-  $pane->pid = 'new-2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b';
-  $pane->panel = 'contentmain';
-  $pane->type = 'entity_field';
-  $pane->subtype = 'node:body';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_default',
-    'delta_limit' => 0,
-    'delta_offset' => '0',
-    'delta_reversed' => FALSE,
-    'formatter_settings' => array(),
-    'context' => 'panelizer',
-    'override_title' => 0,
-    'override_title_text' => '',
-    'override_title_heading' => 'h2',
-  );
-  $pane->cache = array();
-  $pane->style = array(
-    'settings' => NULL,
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 0;
-  $pane->locks = array();
-  $pane->uuid = '2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b';
-  $display->content['new-2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b'] = $pane;
-  $display->panels['contentmain'][0] = 'new-2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b';
-  $pane = new stdClass();
   $pane->pid = 'new-00c90249-89f1-4f8a-8509-7a1d98c6b29e';
   $pane->panel = 'contentmain';
   $pane->type = 'views_panes';
@@ -214,11 +184,11 @@ function viu_simple_faq_panelizer_defaults() {
   );
   $pane->css = array();
   $pane->extras = array();
-  $pane->position = 1;
+  $pane->position = 0;
   $pane->locks = array();
   $pane->uuid = '00c90249-89f1-4f8a-8509-7a1d98c6b29e';
   $display->content['new-00c90249-89f1-4f8a-8509-7a1d98c6b29e'] = $pane;
-  $display->panels['contentmain'][1] = 'new-00c90249-89f1-4f8a-8509-7a1d98c6b29e';
+  $display->panels['contentmain'][0] = 'new-00c90249-89f1-4f8a-8509-7a1d98c6b29e';
   $pane = new stdClass();
   $pane->pid = 'new-c6614dee-17c9-45d3-acc8-bbba3f12d2b7';
   $pane->panel = 'contentmain';
@@ -271,11 +241,41 @@ function viu_simple_faq_panelizer_defaults() {
   );
   $pane->css = array();
   $pane->extras = array();
-  $pane->position = 2;
+  $pane->position = 1;
   $pane->locks = array();
   $pane->uuid = 'c6614dee-17c9-45d3-acc8-bbba3f12d2b7';
   $display->content['new-c6614dee-17c9-45d3-acc8-bbba3f12d2b7'] = $pane;
-  $display->panels['contentmain'][2] = 'new-c6614dee-17c9-45d3-acc8-bbba3f12d2b7';
+  $display->panels['contentmain'][1] = 'new-c6614dee-17c9-45d3-acc8-bbba3f12d2b7';
+  $pane = new stdClass();
+  $pane->pid = 'new-2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b';
+  $pane->panel = 'header';
+  $pane->type = 'entity_field';
+  $pane->subtype = 'node:body';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'label' => 'hidden',
+    'formatter' => 'text_default',
+    'delta_limit' => 0,
+    'delta_offset' => '0',
+    'delta_reversed' => FALSE,
+    'formatter_settings' => array(),
+    'context' => 'panelizer',
+    'override_title' => 0,
+    'override_title_text' => '',
+    'override_title_heading' => 'h2',
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 0;
+  $pane->locks = array();
+  $pane->uuid = '2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b';
+  $display->content['new-2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b'] = $pane;
+  $display->panels['header'][0] = 'new-2010ab8d-8b3a-4f76-8bcd-a9b92ba1417b';
   $pane = new stdClass();
   $pane->pid = 'new-122c10ce-6746-4869-8d69-203eccbb4336';
   $pane->panel = 'sidebar';

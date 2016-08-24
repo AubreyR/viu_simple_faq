@@ -25,8 +25,8 @@ function viu_simple_faq_enable() {
  * Helper function
  *
  * Assumes Drupal 7.14 or later (for second parameter of taxonomy_get_term_by_name).
- */
-function my_feature_safe_add_terms($term_names, $vocabulary_name, $vocabulary_machine_name) {
+ *
+function viu_simple_faq_safe_add_terms($term_names, $vocabulary_name, $vocabulary_machine_name) {
   //  Make sure the vocabulary exists.  This won't apply all desired options
   //  (description, etc.) but that's okay.  Features will do that later.
   //  For now, we just need somewhere to stuff the terms.
@@ -50,11 +50,10 @@ function my_feature_safe_add_terms($term_names, $vocabulary_name, $vocabulary_ma
   }
 }
 
-
 /**
  * Insert your relevant comment here.
  *
-function my_feature_update_7004() {
+function viu_simple_faq_update_7004() {
   $term_names = array(
     'Term One',
     'Term Two',

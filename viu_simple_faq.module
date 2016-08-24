@@ -30,15 +30,17 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
 
 /**
  * Implements hook_form_alter().
+ *
+ * @todo We will use this hook to limit the node edit form from allowing the user to select anything except FAQ Categories
  */
 function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == "oa_section_node_form" && $form['#node_edit_form']) {
-    sdpm($form);
-    sdpm($form_state);
+    //sdpm($form);
+    //sdpm($form_state);
     //dpm($form_id);
     //sdpm($form_state['node']);
-    $section_term_id = $form_state['node']->field_oa_section['und']['0']['tid'];
-    $taxonomy = taxonomy_term_load($section_term_id);
+    //$section_term_id = $form_state['node']->field_oa_section['und']['0']['tid'];
+    //$taxonomy = taxonomy_term_load($section_term_id);
     //dpm($taxonomy);
     //WORKING HERE
   }

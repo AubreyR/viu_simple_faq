@@ -26,6 +26,8 @@ function viu_simple_faq_enable() {
  *
  * Assumes Drupal 7.14 or later (for second parameter of taxonomy_get_term_by_name).
  *
+ * This is where we will add our FAQ Section Type to the Default Section Types provided by Open Atrium
+ *
 function viu_simple_faq_safe_add_terms($term_names, $vocabulary_name, $vocabulary_machine_name) {
   //  Make sure the vocabulary exists.  This won't apply all desired options
   //  (description, etc.) but that's okay.  Features will do that later.

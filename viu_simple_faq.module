@@ -31,7 +31,7 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
 /**
  * Implements hook_form_alter().
  *
- * @todo We will use this hook to limit the node edit form from allowing the user to select anything except FAQ Categories
+ * @todo We will use this hook to limit the node edit form from allowing the user to select anything except FAQ Categories for that particular group/site
  */
 function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == "oa_section_node_form" && $form['#node_edit_form']) {
@@ -39,9 +39,38 @@ function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
     //sdpm($form_state);
     //dpm($form_id);
     //sdpm($form_state['node']);
-    //$section_term_id = $form_state['node']->field_oa_section['und']['0']['tid'];
+    //$section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
     //$taxonomy = taxonomy_term_load($section_term_id);
     //dpm($taxonomy);
     //WORKING HERE
   }
+}
+
+/**
+ * Implements hook_taxonomy_vocabulary_update().
+ *
+ * Used only during development to view characteristics of a FAQ Categories taxonomy (attached to a group/site)
+ */
+function viu_simple_faq_taxonomy_vocabulary_update($vocabulary) {
+  sdpm($vocabulary);
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function viu_simple_faq_entity_insert($entity, $type) {
+  if ($type == 'node' && $entity->type == 'oa_section') {
+    if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
+      //Create Taxonomy here
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ *
+ * For development only, to retrieve Section Default Term properties (for export)
+ */
+function viu_simple_faq_entity_update($entity, $type) {
+  sdpm($entity);
 }

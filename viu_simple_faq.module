@@ -52,7 +52,7 @@ function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
  * Used only during development to view characteristics of a FAQ Categories taxonomy (attached to a group/site)
  */
 function viu_simple_faq_taxonomy_vocabulary_update($vocabulary) {
-  sdpm($vocabulary);
+  //sdpm($vocabulary);
 }
 
 /**
@@ -72,5 +72,5 @@ function viu_simple_faq_entity_insert($entity, $type) {
  * For development only, to retrieve Section Default Term properties (for export)
  */
 function viu_simple_faq_entity_update($entity, $type) {
-  sdpm($entity);
+  //sdpm($entity);
 }

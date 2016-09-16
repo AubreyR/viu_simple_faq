@@ -47,6 +47,16 @@ function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
+ * Implements hook_node_view().
+ *
+ * Redirect individual node view to the testimonial list page
+ *
+ */
+function viu_simple_faq_node_view($node, $view_mode, $langcode) {
+    sdpm($node);
+}
+
+/**
  * Implements hook_taxonomy_vocabulary_update().
  *
  * Used only during development to view characteristics of a FAQ Categories taxonomy (attached to a group/site)

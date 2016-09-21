@@ -27,3 +27,14 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];
   }
 }
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function viu_simple_faq_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools' && $plugin_type == 'content_types') {
+    return 'plugins/content_types';
+  }
+}
+
+

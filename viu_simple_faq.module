@@ -30,6 +30,8 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
 
 /**
  * Implements hook_ctools_plugin_directory().
+ *
+ * Tells ctools that we have content_types included in this module and where they live
  */
 function viu_simple_faq_ctools_plugin_directory($owner, $plugin_type) {
   if ($owner == 'ctools' && $plugin_type == 'content_types') {

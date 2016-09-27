@@ -13,12 +13,26 @@ $plugin = array(
 );
 
 /**
+ * Contents of the pane (form - ajax later)
+ */
+function viu_simple_faq_admin_pane_form($form, &$form_state) {
+  $form['submit'] = array (
+    '#type' => 'submit',
+    '#value' => t('Submit Button'),
+  );
+
+  return $form;
+}
+
+/**
  * Edit form.
  */
 function viu_simple_faq_admin_pane($form, &$form_state) {
   $conf = $form_state['conf']; //Configuration Form
 
-  //Tutorial commented out:
+  sdpm($form);
+  sdpm($form_state);
+  //Tutorial:
 //  $form['term'] = array(
 //    '#type' => 'textfield',
 //    '#title' => t('Term ID'),
@@ -56,26 +70,30 @@ function viu_simple_faq_admin_pane_submit($form, &$form_state) {
 /**
  * Render the panel.
  */
-function viu_simple_faq_admin_pane_render($subtype, $conf, $args, $contexts) {
-  if ($context->empty) {
+function viu_simple_faq_admin_pane_render($subtype, $conf, $args, $context) {
+  //sdpm($subtype);
+  //sdpm($conf);
+  //sdpm($args);
+  //sdpm($context);
+
+  if ($context['panelizer']->empty) {
     return;
   }
 
   // Get full term object for the root term
-  $term = ctools_context_keyword_substitute($conf['term'], array(), $contexts);
+  $term = ctools_context_keyword_substitute($conf['term'], array(), $context);
   $parent_array = taxonomy_get_parents_all($term);
   $root = end($parent_array);
 
   //Render as a block
   $block = new stdClass();
-  $block->module = 'entity';
-  $block->delta = 'taxonomy_term-' . str_replace('-', '_', $conf['view_mode']);
+  $block->module = 'viu_simple_faq';
+  $block->delta = 'viu_simple_faq-admin_pane_form';
 
   //db
   drupal_set_message($block->delta);
 
-  $entity = entity_load_single('taxonomy_term', $root->tid);
-  $block->content = entity_view('taxonomy_term', array($root), $conf['view_mode']);
+  $block->content = drupal_get_form('viu_simple_faq_admin_pane_form');
   return $block;
 }
 

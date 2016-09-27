@@ -62,4 +62,13 @@ function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $f
   }
 }
 
-
+/**
+ * Implements hook_permission().
+ */
+function viu_simple_faq_permission() {
+  return array(
+    'access viu_simple_faq administration' => array(
+      'title' => t('Access VIU Simple FAQ Section Administration Menu'),
+    ),
+  );
+}

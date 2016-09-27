@@ -39,4 +39,27 @@ function viu_simple_faq_ctools_plugin_directory($owner, $plugin_type) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $form_id) {
+  // TODO add conditional to check whether we are looking at a section page form (check taxonomy id)
+  //sdpm($form_state['node']);
+  //$section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
+  //$taxonomy = taxonomy_term_load($section_term_id);
+  //dpm($taxonomy);
+  //WORKING HERE
+  if ($form['#node_edit_form']) {
+    if (NULL == $form['body'][LANGUAGE_NONE][0]['#default_value']) {
+      $form['body'][LANGUAGE_NONE][0]['#default_value'] = t('Please feel free to contact us about other specific questions that you might have.');
+    }
+    if (NULL == $form['body'][LANGUAGE_NONE][0]['#description']) {
+      $form['body'][LANGUAGE_NONE][0]['#description'] = t('You should update the section below with a link to your staff directory, contact page or contact form.');
+    }
+    sdpm($form);
+    sdpm($form_state);
+    sdpm($form_id);
+  }
+}
+
 

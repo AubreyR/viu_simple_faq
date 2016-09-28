@@ -192,7 +192,7 @@ function viu_simple_faq_views_default_views() {
   $handler->display->display_options['fields']['og_vocabulary']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Body */
+  /* Field: Content: Description */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';

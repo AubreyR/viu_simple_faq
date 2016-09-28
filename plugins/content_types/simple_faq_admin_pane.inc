@@ -16,9 +16,16 @@ $plugin = array(
  * Contents of the pane (form - ajax later)
  */
 function viu_simple_faq_admin_pane_form($form, &$form_state) {
-  $form['submit'] = array (
+  $form['manage_faq'] = array (
     '#type' => 'submit',
-    '#value' => t('Submit Button'),
+    '#value' => t('Manage Questions'),
+    '#attributes' => array('class' => array('btn-primary')),
+  );
+
+  $form['manage_categories'] = array (
+    '#type' => 'submit',
+    '#value' => t('Manage Categories'),
+    '#attributes' => array('class' => array('btn-primary')),
   );
 
   return $form;
@@ -30,8 +37,8 @@ function viu_simple_faq_admin_pane_form($form, &$form_state) {
 function viu_simple_faq_admin_pane($form, &$form_state) {
   $conf = $form_state['conf']; //Configuration Form
 
-  sdpm($form);
-  sdpm($form_state);
+  //sdpm($form);
+  //sdpm($form_state);
   //Tutorial:
 //  $form['term'] = array(
 //    '#type' => 'textfield',
@@ -74,19 +81,16 @@ function viu_simple_faq_admin_pane_render($subtype, $conf, $args, $context) {
   //sdpm($subtype);
   //sdpm($conf);
   //sdpm($args);
-  //sdpm($context);
+  sdpm($context);
 
-  if ($context['panelizer']->empty) {
-    return;
-  }
-
-  // Get full term object for the root term
-  $term = ctools_context_keyword_substitute($conf['term'], array(), $context);
-  $parent_array = taxonomy_get_parents_all($term);
-  $root = end($parent_array);
+  //if (is_object($context))
+  //if ($context->empty) {
+  //  return;
+  //}
 
   //Render as a block
   $block = new stdClass();
+  $block->title = 'FAQ Management Options';
   $block->module = 'viu_simple_faq';
   $block->delta = 'viu_simple_faq-admin_pane_form';
 

@@ -13,8 +13,16 @@ include_once 'viu_simple_faq.features.inc';
  */
 function viu_simple_faq_views_api_alter(&$apis) {
   if (!empty($apis['viu_simple_faq']) && $apis['viu_simple_faq']['api'] == '3.0') {
-    $apis['viu_simple_faq']['template path'] = drupal_get_path('module', 'viu_simple_faq') . '/templates';
+    $apis['viu_simple_faq']['template path'] = drupal_get_path('module', 'viu_simple_faq') . '/templates/views';
   }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function viu_simple_faq_theme_registry_alter(&$theme_registry) {
+  //$module_path = drupal_get_path('module', 'viu_simple_faq');
+
 }
 
 /**
@@ -23,7 +31,13 @@ function viu_simple_faq_views_api_alter(&$apis) {
  * We want to override the panels_bootstrap_pane hook and inject some HTML (for the fa-icon)
  */
 function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
-  if ($vars['title'] == "FAQ Categories") {
+  //Target the admin pane:
+  if (isset($vars['content']['#id']) && 'viu-simple-faq-admin-pane-form' == $vars['content']['#id']) {
+    sdpm($vars);
+  }
+
+  //Target the Categories pane:
+  if ('FAQ Categories' == $vars['title']) {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];
   }
 }

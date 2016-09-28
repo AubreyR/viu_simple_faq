@@ -17,7 +17,7 @@ function viu_simple_faq_default_page_manager_handlers() {
   $handler->task = 'node_edit';
   $handler->subtask = '';
   $handler->handler = 'panel_context';
-  $handler->weight = 1;
+  $handler->weight = -27;
   $handler->conf = array(
     'title' => 'Simple FAQ Section Edit Page',
     'no_blocks' => 0,
@@ -59,6 +59,8 @@ function viu_simple_faq_default_page_manager_handlers() {
       'logic' => 'and',
     ),
     'name' => 'simple-faq-section-edit-page',
+    'body_classes_to_remove' => '',
+    'body_classes_to_add' => '',
   );
   $display = new panels_display();
   $display->layout = 'radix_burr_flipped';
@@ -79,6 +81,65 @@ function viu_simple_faq_default_page_manager_handlers() {
   $display->content = array();
   $display->panels = array();
   $pane = new stdClass();
+  $pane->pid = 'new-7bb00809-e8b7-4edf-879b-c1bb584d2baf';
+  $pane->panel = 'contentmain';
+  $pane->type = 'simple_faq_admin_pane';
+  $pane->subtype = 'simple_faq_admin_pane';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'term' => NULL,
+    'view_mode' => NULL,
+    'override_title' => 1,
+    'override_title_text' => 'FAQ Section Administration',
+    'override_title_heading' => 'h2',
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'style' => 'bootstrap_styles:normal',
+    'settings' => array(
+      'heading_style_class' => '',
+      'hide_classes' => array(
+        'hidden-xs' => 0,
+        'hidden-sm' => 0,
+        'hidden-md' => 0,
+        'hidden-lg' => 0,
+      ),
+      'additional_classes' => array(
+        'pane-outline' => 0,
+        'pane-outline-thick' => 0,
+        'pane-border-top' => 0,
+        'no-padding' => 0,
+        'no-margin' => 0,
+        'margin-bottom-5' => 0,
+        'margin-bottom-10' => 0,
+        'margin-bottom-15' => 0,
+        'margin-bottom-20' => 0,
+        'margin-bottom-25' => 0,
+        'margin-bottom-30' => 0,
+        'margin-bottom-35' => 1,
+        'margin-bottom-40' => 0,
+        'margin-bottom-45' => 0,
+        'margin-bottom-50' => 0,
+        'margin-bottom-55' => 0,
+        'margin-bottom-60' => 0,
+        'margin-bottom-100' => 0,
+        'margin-top-20' => 0,
+        'margin-left-5' => 0,
+        'margin-left-10' => 0,
+        'margin-right-5' => 0,
+        'margin-right-10' => 0,
+      ),
+    ),
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 0;
+  $pane->locks = array();
+  $pane->uuid = '7bb00809-e8b7-4edf-879b-c1bb584d2baf';
+  $display->content['new-7bb00809-e8b7-4edf-879b-c1bb584d2baf'] = $pane;
+  $display->panels['contentmain'][0] = 'new-7bb00809-e8b7-4edf-879b-c1bb584d2baf';
+  $pane = new stdClass();
   $pane->pid = 'new-aa634e94-5af3-45d9-b467-95a598e4f927';
   $pane->panel = 'contentmain';
   $pane->type = 'node_form_title';
@@ -96,34 +157,11 @@ function viu_simple_faq_default_page_manager_handlers() {
   );
   $pane->css = array();
   $pane->extras = array();
-  $pane->position = 0;
+  $pane->position = 1;
   $pane->locks = array();
   $pane->uuid = 'aa634e94-5af3-45d9-b467-95a598e4f927';
   $display->content['new-aa634e94-5af3-45d9-b467-95a598e4f927'] = $pane;
-  $display->panels['contentmain'][0] = 'new-aa634e94-5af3-45d9-b467-95a598e4f927';
-  $pane = new stdClass();
-  $pane->pid = 'new-24ec7526-d8c1-44b2-91df-a6ab6f456c40';
-  $pane->panel = 'contentmain';
-  $pane->type = 'form';
-  $pane->subtype = 'form';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'context' => 'argument_node_edit_1',
-    'override_title' => 1,
-    'override_title_text' => '',
-  );
-  $pane->cache = array();
-  $pane->style = array(
-    'settings' => NULL,
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 1;
-  $pane->locks = array();
-  $pane->uuid = '24ec7526-d8c1-44b2-91df-a6ab6f456c40';
-  $display->content['new-24ec7526-d8c1-44b2-91df-a6ab6f456c40'] = $pane;
-  $display->panels['contentmain'][1] = 'new-24ec7526-d8c1-44b2-91df-a6ab6f456c40';
+  $display->panels['contentmain'][1] = 'new-aa634e94-5af3-45d9-b467-95a598e4f927';
   $pane = new stdClass();
   $pane->pid = 'new-e95138dd-b809-4362-994e-120d7eba3241';
   $pane->panel = 'contentmain';
@@ -184,6 +222,29 @@ function viu_simple_faq_default_page_manager_handlers() {
   $pane->uuid = 'e95138dd-b809-4362-994e-120d7eba3241';
   $display->content['new-e95138dd-b809-4362-994e-120d7eba3241'] = $pane;
   $display->panels['contentmain'][2] = 'new-e95138dd-b809-4362-994e-120d7eba3241';
+  $pane = new stdClass();
+  $pane->pid = 'new-24ec7526-d8c1-44b2-91df-a6ab6f456c40';
+  $pane->panel = 'contentmain';
+  $pane->type = 'form';
+  $pane->subtype = 'form';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'context' => 'argument_node_edit_1',
+    'override_title' => 1,
+    'override_title_text' => '',
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 3;
+  $pane->locks = array();
+  $pane->uuid = '24ec7526-d8c1-44b2-91df-a6ab6f456c40';
+  $display->content['new-24ec7526-d8c1-44b2-91df-a6ab6f456c40'] = $pane;
+  $display->panels['contentmain'][3] = 'new-24ec7526-d8c1-44b2-91df-a6ab6f456c40';
   $pane = new stdClass();
   $pane->pid = 'new-46cc1635-49e8-4fc4-9308-16c25aa33df5';
   $pane->panel = 'sidebar';

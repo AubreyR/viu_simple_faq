@@ -32,7 +32,7 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
   if ('FAQ Categories' == $vars['title']) {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];
   }
-}=
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

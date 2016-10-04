@@ -67,3 +67,37 @@ function viu_simple_faq_permission() {
     ),
   );
 }
+
+/**
+ * Implements hook_menu().
+ *
+ * Provide administration links on the section page
+ */
+function viu_simple_faq_menu() {
+  $items['node/%node/manage_faq'] = array(
+    'title' => t('Manage FAQ Items'),
+    'page callback' => 'drupal_goto',
+    'access callback' => '_viu_simple_faq_access_callback',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['node/%node/manage_categories'] = array(
+    'title' => t('Manage FAQ Categories'),
+    'page callback' => 'drupal_goto',
+    'access callback' => '_viu_simple_faq_access_callback',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Access callback for managing FAQ nodes
+ */
+function _viu_simple_faq_access_callback($node) {
+  //TODO Limit to only FAQ sections
+  sdpm($node);
+  return 'oa_section' == $node->type && user_access('access viu_simple_faq administration');
+}

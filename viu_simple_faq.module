@@ -23,11 +23,6 @@ function viu_simple_faq_views_api_alter(&$apis) {
  * We want to override the panels_bootstrap_pane hook and inject some HTML (for the fa-icon)
  */
 function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
-  //Target the admin pane:
-  if (isset($vars['content']['#id']) && 'viu-simple-faq-admin-pane-form' == $vars['content']['#id']) {
-    sdpm($vars);
-  }
-
   //Target the Categories pane:
   if ('FAQ Categories' == $vars['title']) {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];

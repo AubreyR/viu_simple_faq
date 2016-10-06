@@ -10,6 +10,17 @@
  */
 function viu_simple_faq_disable() {
   cache_clear_all('*', 'cache', TRUE);
+  if (module_exists('contextual_tabs')) {
+    $count = 0;
+    $contextual_tabs_extract = variable_get('contextual_tabs_extract', '');
+    $faq_buttons = "\r\n            Manage FAQ Categories, icon-question\r\n            Manage FAQ Items, icon-question";
+    str_replace($faq_buttons, '', $contextual_tabs_extract, $count);
+    if (1 === $count) {
+      drupal_set_message('Removed VIU Simple FAQ Contextual Tabs button rules');
+    } else {
+      drupal_set_message('ERROR: unable to find stock VIU Simple FAQ Contextual Tabs button rules, may require attention.');
+    }
+  }
 }
 
 /**
@@ -19,48 +30,17 @@ function viu_simple_faq_enable() {
   //Auto enable feature reversion
   features_revert_module('viu_simple_faq');
   cache_clear_all('*', 'cache', TRUE);
-}
 
-/**
- * Helper function
- *
- * Assumes Drupal 7.14 or later (for second parameter of taxonomy_get_term_by_name).
- *
- * This is where we will add our FAQ Section Type to the Default Section Types provided by Open Atrium
- *
-function viu_simple_faq_safe_add_terms($term_names, $vocabulary_name, $vocabulary_machine_name) {
-  //  Make sure the vocabulary exists.  This won't apply all desired options
-  //  (description, etc.) but that's okay.  Features will do that later.
-  //  For now, we just need somewhere to stuff the terms.
-  $vocab = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
-  if ($vocab === FALSE) {
-    $vocab = (object)array('name' => $vocabulary_name,
-      'machine_name' => $vocabulary_machine_name);
-    $vocab = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
-  }
-
-  if (is_object($vocab) && property_exists($vocab, 'vid') && $vocab->vid > 0) {
-    //  Load each term.
-    foreach ($term_names as $term_name) {
-      $term = taxonomy_get_term_by_name($term_name, $vocabulary_machine_name);
-      if (count($term) == 0) {
-        $term = (object)array('name' => $term_name,
-          'vid' => $vocab->vid);
-        taxonomy_term_save($term);
-      }
+  //Add contextual tabs buttons (pop-out)
+  if (module_exists('contextual_tabs')) {
+    $contextual_tabs_extract = variable_get('contextual_tabs_extract', '');
+    $faq_buttons = "\r\n            Manage FAQ Categories, icon-question\r\n            Manage FAQ Items, icon-question";
+    $position = strpos($modvar, $faq_buttons);
+    if (FALSE === $position) {
+      variable_set('contextual_tabs_extract', $contextual_tabs_extract . $faq_buttons);
+      drupal_set_message('Added VIU Simple FAQ Contextual Tabs button rules');
+    } else {
+      drupal_set_message('VIU Simple FAQ Contextual Tabs button rules already exists - not added');
     }
   }
 }
-
-/**
- * Insert your relevant comment here.
- *
-function viu_simple_faq_update_7004() {
-  $term_names = array(
-    'Term One',
-    'Term Two',
-  );
-  my_feature_safe_add_terms($term_names, 'Vocab Name', 'vocab_machine_name');
-
-  //  Do the same thing with additional vocabs.
-}*/

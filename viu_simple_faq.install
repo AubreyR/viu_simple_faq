@@ -14,11 +14,12 @@ function viu_simple_faq_disable() {
     $count = 0;
     $contextual_tabs_extract = variable_get('contextual_tabs_extract', '');
     $faq_buttons = "\r\n            Manage FAQ Categories, icon-question\r\n            Manage FAQ Items, icon-question";
-    str_replace($faq_buttons, '', $contextual_tabs_extract, $count);
-    if (1 === $count) {
+    $contextual_tabs_extract = str_replace($faq_buttons, '', $contextual_tabs_extract, $count);
+    if (0 != $count) {
+      variable_set('contextual_tabs_extract', $contextual_tabs_extract);
       drupal_set_message('Removed VIU Simple FAQ Contextual Tabs button rules');
     } else {
-      drupal_set_message('ERROR: unable to find stock VIU Simple FAQ Contextual Tabs button rules, may require attention.');
+      drupal_set_message('WARNING: unable to find stock VIU Simple FAQ Contextual Tabs button rules, may require attention.');
     }
   }
 }
@@ -35,7 +36,7 @@ function viu_simple_faq_enable() {
   if (module_exists('contextual_tabs')) {
     $contextual_tabs_extract = variable_get('contextual_tabs_extract', '');
     $faq_buttons = "\r\n            Manage FAQ Categories, icon-question\r\n            Manage FAQ Items, icon-question";
-    $position = strpos($modvar, $faq_buttons);
+    $position = strpos($contextual_tabs_extract, $faq_buttons);
     if (FALSE === $position) {
       variable_set('contextual_tabs_extract', $contextual_tabs_extract . $faq_buttons);
       drupal_set_message('Added VIU Simple FAQ Contextual Tabs button rules');

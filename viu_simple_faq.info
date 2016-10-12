@@ -41,6 +41,7 @@ features[field_instance][] = node-viu_simple_faq_question-oa_other_spaces_ref
 features[field_instance][] = node-viu_simple_faq_question-oa_section_ref
 features[field_instance][] = node-viu_simple_faq_question-og_group_ref
 features[field_instance][] = node-viu_simple_faq_question-og_vocabulary
+features[field_instance][] = taxonomy_term-faq_categories-oa_section_ref
 features[node][] = viu_simple_faq_question
 features[panelizer_defaults][] = node:oa_section:simple_faq_section
 features[taxonomy][] = faq_categories

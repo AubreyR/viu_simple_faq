@@ -23,9 +23,9 @@ function viu_simple_faq_field_group_info() {
     'label' => 'Site/Section',
     'weight' => '3',
     'children' => array(
-      0 => 'og_group_ref',
+      0 => 'oa_other_spaces_ref',
       1 => 'oa_section_ref',
-      2 => 'oa_other_spaces_ref',
+      2 => 'og_group_ref',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(

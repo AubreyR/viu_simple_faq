@@ -358,7 +358,7 @@ function viu_simple_faq_field_default_field_instances() {
     'entity_type' => 'node',
     'fences_wrapper' => 'no_wrapper',
     'field_name' => 'og_vocabulary',
-    'label' => 'Categories',
+    'label' => 'FAQ Categories',
     'options_limit' => FALSE,
     'options_limit_empty_behaviour' => 0,
     'options_limit_fields' => array(),
@@ -385,16 +385,74 @@ function viu_simple_faq_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'taxonomy_term-faq_categories-oa_section_ref'.
+  $field_instances['taxonomy_term-faq_categories-oa_section_ref'] = array(
+    'bundle' => 'faq_categories',
+    'default_value' => NULL,
+    'default_value_function' => 'entityreference_prepopulate_field_default_value',
+    'deleted' => 0,
+    'description' => 'What FAQ Section does this term belong to?',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 0,
+      ),
+      'featured' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'taxonomy_term',
+    'fences_wrapper' => 'no_wrapper',
+    'field_name' => 'oa_section_ref',
+    'label' => 'Section',
+    'options_limit' => FALSE,
+    'options_limit_empty_behaviour' => 0,
+    'options_limit_fields' => array(),
+    'required' => 1,
+    'settings' => array(
+      'behaviors' => array(
+        'prepopulate' => array(
+          'action' => 'hide',
+          'action_on_edit' => 1,
+          'fallback' => 'hide',
+          'providers' => array(
+            'og_context' => 1,
+            'url' => 1,
+          ),
+          'skip_perm' => 'administer taxonomy',
+          'status' => 1,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'og',
+      'settings' => array(),
+      'type' => 'og_complex',
+      'weight' => 32,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Answer');
   t('Answer the question.');
-  t('Categories');
   t('Defaults to the site in which you created this Q&A Pair.  If you wish this Q&A pair to appear in other sites, you can select them in the menu below.');
+  t('FAQ Categories');
   t('Primary Site');
   t('Section');
   t('Select a list of additional Sites that this piece of content should be visible in.  In order for this feature to work, this content must be displayed within the context of a site, subsite, or section page (such as a Simple FAQ section page).');
   t('Visible on other Sites');
+  t('What FAQ Section does this term belong to?');
 
   return $field_instances;
 }

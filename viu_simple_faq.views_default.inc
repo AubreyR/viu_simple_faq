@@ -192,7 +192,7 @@ function viu_simple_faq_views_default_views() {
   $handler->display->display_options['fields']['og_vocabulary']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Description */
+  /* Field: Content: Body */
   $handler->display->display_options['fields']['body']['id'] = 'body';
   $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
   $handler->display->display_options['fields']['body']['field'] = 'body';
@@ -201,10 +201,6 @@ function viu_simple_faq_views_default_views() {
   $handler->display->display_options['fields']['body']['element_default_classes'] = FALSE;
   $handler->display->display_options['pane_category']['name'] = 'Simple FAQ';
   $handler->display->display_options['pane_category']['weight'] = '0';
-
-  /* Display: FAQ Admin Pane */
-  $handler = $view->new_display('panel_pane', 'FAQ Admin Pane', 'panel_pane_3');
-  $handler->display->display_options['display_description'] = 'FAQ Section administration menu to be displayed on a Simple FAQ section page and updated via Ajax.';
   $export['simple_faq_views'] = $view;
 
   return $export;

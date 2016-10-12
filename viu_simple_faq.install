@@ -13,7 +13,7 @@ function viu_simple_faq_disable() {
   if (module_exists('contextual_tabs')) {
     $count = 0;
     $contextual_tabs_extract = variable_get('contextual_tabs_extract', '');
-    $faq_buttons = "\r\n            Manage FAQ Categories, icon-question\r\n            Manage FAQ Items, icon-question";
+    $faq_buttons = "\r\n            Manage FAQ Items, icon-question\r\n            Manage FAQ Categories, icon-question";
     $contextual_tabs_extract = str_replace($faq_buttons, '', $contextual_tabs_extract, $count);
     if (0 != $count) {
       variable_set('contextual_tabs_extract', $contextual_tabs_extract);
@@ -35,7 +35,7 @@ function viu_simple_faq_enable() {
   //Add contextual tabs buttons (pop-out)
   if (module_exists('contextual_tabs')) {
     $contextual_tabs_extract = variable_get('contextual_tabs_extract', '');
-    $faq_buttons = "\r\n            Manage FAQ Categories, icon-question\r\n            Manage FAQ Items, icon-question";
+    $faq_buttons = "\r\n            Manage FAQ Items, icon-question\r\n            Manage FAQ Categories, icon-question";
     $position = strpos($contextual_tabs_extract, $faq_buttons);
     if (FALSE === $position) {
       variable_set('contextual_tabs_extract', $contextual_tabs_extract . $faq_buttons);

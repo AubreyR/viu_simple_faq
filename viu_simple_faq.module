@@ -69,12 +69,22 @@ function viu_simple_faq_permission() {
  * Provide administration links on the section page
  */
 function viu_simple_faq_menu() {
+  /*$items['node/%node/faq_section'] = array(
+    'title' => 'FAQ Section Display',
+    'page callback' => 'node_page_default',
+    'access callback' => '_viu_simple_faq_access_callback',
+    'access arguments' => array(1),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );*/// This works but only on the default node view page, not the panelizer/section page (I wonder why?)
+
   $items['node/%node/manage_faq'] = array(
     'title' => t('Manage FAQ Items'),
-    'page callback' => 'drupal_goto',
+    'page callback' => '_viu_simple_faq_manage_content',
+    'page arguments' => array(1),
     'access callback' => '_viu_simple_faq_access_callback',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
+    'weight' => -10,
   );
 
   $items['node/%node/manage_categories'] = array(
@@ -93,6 +103,12 @@ function viu_simple_faq_menu() {
  */
 function _viu_simple_faq_access_callback($node) {
   //TODO Limit to only FAQ sections
-  sdpm($node);
   return 'oa_section' == $node->type && user_access('access viu_simple_faq administration');
+}
+
+/**
+ * Page routing mechanism for Manage FAQ menu tab
+ */
+function _viu_simple_faq_manage_content($node) {
+  drupal_goto(url('node/' . $node->nid . '/content'));
 }

@@ -121,10 +121,12 @@ function _viu_simple_faq_manage_content($node) {
   drupal_goto(url('node/' . $node->nid . '/content'));
 }
 
+//TODO Dead End code below - needs to be checked whether deprecated or not
+
 /**
  * Implements hook_form_alter().
  *
- * @todo We will use this hook to limit the node edit form from allowing the user to select anything except FAQ Categories for that particular group/site
+ * @todo Deprecated - Can use this hook for viewing the data structures on node edit or creation (for FAQ section pages)
  */
 function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == "oa_section_node_form" && $form['#node_edit_form']) {

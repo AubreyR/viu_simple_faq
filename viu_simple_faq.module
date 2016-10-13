@@ -34,11 +34,11 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
  */
 function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $form_id) {
   // TODO add conditional to check whether we are looking at a section page form (check taxonomy id)
-  //sdpm($form_state['node']);
-  //$section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
-  //$taxonomy = taxonomy_term_load($section_term_id);
-  //dpm($taxonomy);
-  //WORKING HERE
+//  sdpm($form_state['node']);
+//  $section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
+//  $taxonomy = taxonomy_term_load($section_term_id);
+//  sdpm($taxonomy);
+  //TODO See if we can do these through the UI instead of here (configuration instead of customization)
   if ($form['#node_edit_form']) {
     if (NULL == $form['body'][LANGUAGE_NONE][0]['#default_value']) {
       $form['body'][LANGUAGE_NONE][0]['#default_value'] = t('Please feel free to contact us about other specific questions that you might have.');
@@ -46,9 +46,9 @@ function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $f
     if (NULL == $form['body'][LANGUAGE_NONE][0]['#description']) {
       $form['body'][LANGUAGE_NONE][0]['#description'] = t('You should update the section below with a link to your staff directory, contact page or contact form.');
     }
-    sdpm($form);
-    sdpm($form_state);
-    sdpm($form_id);
+    //sdpm($form);
+    //sdpm($form_state);
+    //sdpm($form_id);
   }
 }
 
@@ -87,7 +87,7 @@ function viu_simple_faq_menu() {
     'weight' => -10,
   );
 
-  $items['node/%node/manage_categories'] = array(
+  $items['node/%node/faq_categories/%section'] = array(
     'title' => t('Manage FAQ Categories'),
     'page callback' => 'drupal_goto',
     'access callback' => '_viu_simple_faq_access_callback',
@@ -96,6 +96,14 @@ function viu_simple_faq_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function viu_simple_faq_entity_info_alter(&$entity_info) {
+  $entity_info['taxonomy_vocabulary']['fieldable'] = TRUE;
+  sdpm($entity_info);
 }
 
 /**
@@ -111,4 +119,57 @@ function _viu_simple_faq_access_callback($node) {
  */
 function _viu_simple_faq_manage_content($node) {
   drupal_goto(url('node/' . $node->nid . '/content'));
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * @todo We will use this hook to limit the node edit form from allowing the user to select anything except FAQ Categories for that particular group/site
+ */
+function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == "oa_section_node_form" && $form['#node_edit_form']) {
+    //sdpm($form);
+    //sdpm($form_state);
+    //dpm($form_id);
+    //sdpm($form_state['node']);
+    //$section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
+    //$taxonomy = taxonomy_term_load($section_term_id);
+    //dpm($taxonomy);
+    //WORKING HERE
+  }
+}
+/**
+ * Implements hook_node_view().
+ *
+ * Redirect individual node view to the testimonial list page
+ *
+ */
+function viu_simple_faq_node_view($node, $view_mode, $langcode) {
+  sdpm($node);
+}
+/**
+ * Implements hook_taxonomy_vocabulary_update().
+ *
+ * Used only during development to view characteristics of a FAQ Categories taxonomy (attached to a group/site)
+ */
+function viu_simple_faq_taxonomy_vocabulary_update($vocabulary) {
+  //sdpm($vocabulary);
+}
+/**
+ * Implements hook_entity_insert().
+ */
+function viu_simple_faq_entity_insert($entity, $type) {
+  if ($type == 'node' && $entity->type == 'oa_section') {
+    if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
+      //Create Taxonomy here
+    }
+  }
+}
+/**
+ * Implements hook_entity_update().
+ *
+ * For development only, to retrieve Section Default Term properties (for export)
+ */
+function viu_simple_faq_entity_update($entity, $type) {
+  //sdpm($entity);
 }

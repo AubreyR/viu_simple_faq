@@ -102,8 +102,8 @@ function viu_simple_faq_menu() {
  * Implements hook_entity_info_alter().
  */
 function viu_simple_faq_entity_info_alter(&$entity_info) {
-  $entity_info['taxonomy_vocabulary']['fieldable'] = TRUE;
-  sdpm($entity_info);
+//  $entity_info['taxonomy_vocabulary']['fieldable'] = TRUE;
+//  sdpm($entity_info);
 }
 
 /**
@@ -163,7 +163,7 @@ function viu_simple_faq_taxonomy_vocabulary_update($vocabulary) {
 function viu_simple_faq_entity_insert($entity, $type) {
   if ($type == 'node' && $entity->type == 'oa_section') {
     if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
-      //Create Taxonomy here
+      //$new_vocab
     }
   }
 }

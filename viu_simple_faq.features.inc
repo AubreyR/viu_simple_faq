@@ -52,15 +52,6 @@ function viu_simple_faq_views_api($module = NULL, $api = NULL) {
 }
 
 /**
- * Implements hook_field_default_field_bases_alter().
- */
-function viu_simple_faq_field_default_field_bases_alter(&$data) {
-  if (isset($data['og_vocabulary'])) {
-    $data['og_vocabulary']['settings']['handler_settings']['target_bundles']['faq_categories'] = 'faq_categories'; /* WAS: '' */
-  }
-}
-
-/**
  * Implements hook_node_info().
  */
 function viu_simple_faq_node_info() {

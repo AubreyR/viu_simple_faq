@@ -149,24 +149,65 @@ function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
 function viu_simple_faq_node_view($node, $view_mode, $langcode) {
   sdpm($node);
 }
-/**
- * Implements hook_taxonomy_vocabulary_update().
- *
- * Used only during development to view characteristics of a FAQ Categories taxonomy (attached to a group/site)
- */
-function viu_simple_faq_taxonomy_vocabulary_update($vocabulary) {
-  //sdpm($vocabulary);
-}
+
 /**
  * Implements hook_entity_insert().
  */
 function viu_simple_faq_entity_insert($entity, $type) {
+  //TODO Double check this conditional doesn't fire when it's not supposed to
   if ($type == 'node' && $entity->type == 'oa_section') {
     if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
-      //$new_vocab
+      //Gather information we need for the name of the new taxonomy vocabulary:
+      $og_context = og_context();
+      sdpm($og_context);
+      $group = node_load($og_context['gid']);
+      sdpm($group);
+
+      $new_vocab_machine_name = str_replace('-', '_', strtolower($group->title)) . "_default_faq_categories";
+      //TODO Taxonomy Todos: check duplicate names?  check that machine name duplication is allowed (auto-handled), implement your own if it's not
+      // Check that a context is available
+      // Check no duplicates
+      // Consider other error checks
+      $new_vocab = (object) array(
+        'name' => $group->title . ' - FAQ Categories',
+        'description' => "Default " . $group->title . " FAQ categories vocabulary",
+        'machine_name' => $new_vocab_machine_name,
+      );
+      
+      taxonomy_vocabulary_save();
+      
+      //Grab the default og vocab data structure:
+      //require_once drupal_get_path('module', 'ultimate_cron') . '/includes/nicejson.php';
+
+      //Generate OG Vocab Entity
+      $og_vocab = og_vocab_load_og_vocab(0, "node", "viu_simple_faq_question", NULL, TRUE);
+
+      sdpm($og_vocab);
+
+      //Populate the values:
+
+      //Grab the required parameters for OG Vocab settings
+      $vid = NULL;
+      $group_type = NULL;
+      $gid = NULL;
+      $settings = NULL;
+
+      //Populate the og vocab settings and relationship tables
+      //og_vocab_relation_save($);
+
+
+
+      //All code below duplicates the default behaviour of OG Vocab, except just for our section only.
+      //taxonomy_vocabulary_save($new_vocab);
+      //Add as an og_vocab
+
+
+
+      //attach to simple Q&A Content
     }
   }
 }
+
 /**
  * Implements hook_entity_update().
  *

@@ -148,6 +148,10 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
 
 /**
  * Implements hook_entity_insert().
+ *
+ * Programmatically create FAQ Categories Taxonomy Vocabulary
+ *
+ * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
   sdpm($entity);
@@ -160,9 +164,10 @@ function viu_simple_faq_entity_insert($entity, $type) {
       $group = node_load($og_context['gid']);
       //TODO make sure that the group context exists (add error checking)
 
-      //Generate machine name for new vocabulary
-      $machine_name = str_replace('-', '_', strtolower($group->title)) . "_default_faq_categories";
+      //Generate machine name for new vocabulary AND check to make sure it's not a duplicate
+      $machine_name = str_replace(array('-', ' ',), '_', strtolower($group->title)) . "_default_faq_categories";
 
+      //TODO check to make sure this has no ramifications for the other operations we will perform
       // Set the static variable to "skip" to prevent altering while we verify
       // the machine name doesn't exist yet.
       $cache = &drupal_static('og_vocab_query_taxonomy_vocabulary_load_multiple_alter', FALSE);
@@ -173,7 +178,8 @@ function viu_simple_faq_entity_insert($entity, $type) {
         // exist yet.
         $i = 1;
         while (taxonomy_vocabulary_machine_name_load($machine_name)) {
-          $machine_name = substr($machine_name, 0, 32 - strlen($i)) . $i;
+          //ANOTE: You changed 48, it used to be 32 - test it
+          $machine_name = substr($machine_name, 0, 48 - strlen($i)) . $i;
           ++$i;
         }
       }
@@ -195,12 +201,13 @@ function viu_simple_faq_entity_insert($entity, $type) {
         'gid' => $og_context['gid'],
       );
       //TODO Add error check (returns false on failure)
-      $vid = taxonomy_vocabulary_machine_name_load($machine_name);
+      $vocabulary = taxonomy_vocabulary_machine_name_load($machine_name);
+      $vid = $vocabulary->vid;
       og_vocab_relation_save($vid, $og_vocab_relation['group_type'], $og_vocab_relation['gid']);
 
       //Simple FAQ content type-specific settings.
       $og_vocab_settings = array(
-        'required' => TRUE,
+        'required' => 1,
         'widget_type' => 'options_buttons',
         'cardinality' => FIELD_CARDINALITY_UNLIMITED,
       );
@@ -210,7 +217,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
       $og_vocab = og_vocab_create_og_vocab($vid, $og_vocab_relation['group_type'], 'viu_simple_faq_question', $field_name, $og_vocab_settings);
 
       //TODO Error checking
-      $og_vocab->save;
+      $og_vocab->save();
 
       sdpm($vocabulary);
 

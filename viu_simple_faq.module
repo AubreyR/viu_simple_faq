@@ -34,21 +34,19 @@ function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
  */
 function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $form_id) {
   // TODO add conditional to check whether we are looking at a section page form (check taxonomy id)
-//  sdpm($form_state['node']);
-//  $section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
-//  $taxonomy = taxonomy_term_load($section_term_id);
-//  sdpm($taxonomy);
+
   //TODO See if we can do these through the UI instead of here (configuration instead of customization)
   if ($form['#node_edit_form']) {
+    if (NULL == $form['title']['#default_value']) {
+      $form['title']['#default_value'] = t('Frequently Asked Questions');
+      $form['title']['#description'] = t('The title of this section on your website.');
+    };
     if (NULL == $form['body'][LANGUAGE_NONE][0]['#default_value']) {
       $form['body'][LANGUAGE_NONE][0]['#default_value'] = t('Please feel free to contact us about other specific questions that you might have.');
     }
     if (NULL == $form['body'][LANGUAGE_NONE][0]['#description']) {
       $form['body'][LANGUAGE_NONE][0]['#description'] = t('You should update the section below with a link to your staff directory, contact page or contact form.');
     }
-    //sdpm($form);
-    //sdpm($form_state);
-    //sdpm($form_id);
   }
 }
 
@@ -121,8 +119,6 @@ function _viu_simple_faq_manage_content($node) {
   drupal_goto(url('node/' . $node->nid . '/content'));
 }
 
-//TODO Dead End code below - needs to be checked whether deprecated or not
-
 /**
  * Implements hook_form_alter().
  *
@@ -154,56 +150,71 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  * Implements hook_entity_insert().
  */
 function viu_simple_faq_entity_insert($entity, $type) {
-  //TODO Double check this conditional doesn't fire when it's not supposed to
+  sdpm($entity);
+  //TODO Double check this conditional doesn't fire when it's not supposed to (i.e. on edit pages)
   if ($type == 'node' && $entity->type == 'oa_section') {
     if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
+
       //Gather information we need for the name of the new taxonomy vocabulary:
       $og_context = og_context();
-      sdpm($og_context);
       $group = node_load($og_context['gid']);
-      sdpm($group);
+      //TODO make sure that the group context exists (add error checking)
 
-      $new_vocab_machine_name = str_replace('-', '_', strtolower($group->title)) . "_default_faq_categories";
-      //TODO Taxonomy Todos: check duplicate names?  check that machine name duplication is allowed (auto-handled), implement your own if it's not
-      // Check that a context is available
-      // Check no duplicates
-      // Consider other error checks
-      $new_vocab = (object) array(
-        'name' => $group->title . ' - FAQ Categories',
-        'description' => "Default " . $group->title . " FAQ categories vocabulary",
-        'machine_name' => $new_vocab_machine_name,
+      //Generate machine name for new vocabulary
+      $machine_name = str_replace('-', '_', strtolower($group->title)) . "_default_faq_categories";
+
+      // Set the static variable to "skip" to prevent altering while we verify
+      // the machine name doesn't exist yet.
+      $cache = &drupal_static('og_vocab_query_taxonomy_vocabulary_load_multiple_alter', FALSE);
+      $cache = 'skip';
+
+      if (taxonomy_vocabulary_machine_name_load($machine_name)) {
+        // Start iterating over machine names until we hit one that doesn't
+        // exist yet.
+        $i = 1;
+        while (taxonomy_vocabulary_machine_name_load($machine_name)) {
+          $machine_name = substr($machine_name, 0, 32 - strlen($i)) . $i;
+          ++$i;
+        }
+      }
+
+      //Generate new vocabulary
+      $vocabulary = (object) array(
+        'name' => t($group->title . " Default FAQ Categories"),
+        'machine_name' => $machine_name,
+        'description' => t('These are the default FAQ Categories for the ' . $group->title . ' section.'),
+        'hierarchy' => '0',
+        'weight' => 0,
       );
-      
-      taxonomy_vocabulary_save();
-      
-      //Grab the default og vocab data structure:
-      //require_once drupal_get_path('module', 'ultimate_cron') . '/includes/nicejson.php';
+      //TODO error checking here (based on return value, throw a drupal_set_msg or error)
+      taxonomy_vocabulary_save($vocabulary);
+
+      //Relate group to vocab
+      $og_vocab_relation = array (
+        'group_type' => $og_context['group_type'],
+        'gid' => $og_context['gid'],
+      );
+      //TODO Add error check (returns false on failure)
+      $vid = taxonomy_vocabulary_machine_name_load($machine_name);
+      og_vocab_relation_save($vid, $og_vocab_relation['group_type'], $og_vocab_relation['gid']);
+
+      //Simple FAQ content type-specific settings.
+      $og_vocab_settings = array(
+        'required' => TRUE,
+        'widget_type' => 'options_buttons',
+        'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      );
 
       //Generate OG Vocab Entity
-      $og_vocab = og_vocab_load_og_vocab(0, "node", "viu_simple_faq_question", NULL, TRUE);
+      $field_name = key(og_vocab_get_og_vocab_fields('node', 'viu_simple_faq_question'));
+      $og_vocab = og_vocab_create_og_vocab($vid, $og_vocab_relation['group_type'], 'viu_simple_faq_question', $field_name, $og_vocab_settings);
+
+      //TODO Error checking
+      $og_vocab->save;
+
+      sdpm($vocabulary);
 
       sdpm($og_vocab);
-
-      //Populate the values:
-
-      //Grab the required parameters for OG Vocab settings
-      $vid = NULL;
-      $group_type = NULL;
-      $gid = NULL;
-      $settings = NULL;
-
-      //Populate the og vocab settings and relationship tables
-      //og_vocab_relation_save($);
-
-
-
-      //All code below duplicates the default behaviour of OG Vocab, except just for our section only.
-      //taxonomy_vocabulary_save($new_vocab);
-      //Add as an og_vocab
-
-
-
-      //attach to simple Q&A Content
     }
   }
 }

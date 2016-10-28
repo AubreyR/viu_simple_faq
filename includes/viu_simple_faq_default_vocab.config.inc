@@ -2,7 +2,10 @@
 /**
  * Default taxonomy structure for passing to OG Vocab Taxonomy creation functions
  */
-$new_og_vocab = (object) array(
+
+$og_vocab =
+
+$vocabulary = (object) array(
    'name' => 'xxx',
    'machine_name' => 'xxx',
    'description' => 'xxx',
@@ -21,8 +24,8 @@ $new_og_vocab = (object) array(
     array ( //ANOTE: Build out this manually and attach it
       'entity' =>
       OgVocab::__set_state(array(
-         'entity_type' => 'node',
-         'bundle' => 'viu_simple_faq_question',
+         'entity_type' => 'file',
+         'bundle' => 'document',
          'settings' =>
         array (
           'required' => false,
@@ -101,12 +104,12 @@ $new_og_vocab = (object) array(
          'field_name' => 'og_vocabulary',
          'is_new' => true,
       )),
-      'status' => 1,
-      'widget_type' => 'options_buttons',
-      'required' => 1,
+      'status' => 0,
+      'widget_type' => 'options_select',
+      'required' => 0,
       'cardinality' => '-1',
       'field_name' => 'og_vocabulary',
     ),
   ),
    'op' => 'Save',
-))
+));

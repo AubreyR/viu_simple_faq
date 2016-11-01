@@ -163,16 +163,18 @@ function viu_simple_faq_entity_insert($entity, $type) {
       $og_context = og_context();
       $group = node_load($og_context['gid']);
       //TODO make sure that the group context exists (add error checking)
+      //TODO add support for subsites (talk to Darryl about use cases)
 
       //Generate machine name for new vocabulary AND check to make sure it's not a duplicate
       $machine_name = str_replace(array('-', ' ',), '_', strtolower($group->title)) . "_default_faq_categories";
 
-      //TODO check to make sure this has no ramifications for the other operations we will perform
       // Set the static variable to "skip" to prevent altering while we verify
       // the machine name doesn't exist yet.
       $cache = &drupal_static('og_vocab_query_taxonomy_vocabulary_load_multiple_alter', FALSE);
       $cache = 'skip';
 
+      //TODO Might need to do something about this if the user creates multiple taxonomies
+      // i.e. How are we going to retrieve the vocab in the "manage categories" tab callback?
       if (taxonomy_vocabulary_machine_name_load($machine_name)) {
         // Start iterating over machine names until we hit one that doesn't
         // exist yet.
@@ -192,9 +194,19 @@ function viu_simple_faq_entity_insert($entity, $type) {
         'hierarchy' => '0',
         'weight' => 0,
       );
-      //TODO error checking here (based on return value, throw a drupal_set_msg or error)
-      taxonomy_vocabulary_save($vocabulary);
 
+      //TODO error checking here (based on return value, throw a drupal_set_msg or error)
+      switch (taxonomy_vocabulary_save($vocabulary)) {
+        case SAVED_NEW:
+          drupal_set_message(t('Created new vocabulary %name.', array('%name' => $vocabulary->name)));
+          watchdog('taxonomy', 'Created new vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
+          break;
+
+        default:
+          drupal_set_message(t('Updated vocabulary %name.', array('%name' => $vocabulary->name)));
+          watchdog('taxonomy', 'Updated vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
+          break;
+      
       //Relate group to vocab
       $og_vocab_relation = array (
         'group_type' => $og_context['group_type'],

@@ -87,7 +87,7 @@ function viu_simple_faq_menu() {
 
   $items['node/%node/faq_categories/%section'] = array(
     'title' => t('Manage FAQ Categories'),
-    'page callback' => 'drupal_goto',
+    'page callback' => '_viu_simple_faq_manage_categories',
     'access callback' => '_viu_simple_faq_access_callback',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
@@ -133,13 +133,12 @@ function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
     //$section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
     //$taxonomy = taxonomy_term_load($section_term_id);
     //dpm($taxonomy);
-    //WORKING HERE
   }
 }
 /**
  * Implements hook_node_view().
  *
- * Redirect individual node view to the testimonial list page
+ * @todo FOR DEVELOPMENT ONLY (data structure inspection)
  *
  */
 function viu_simple_faq_node_view($node, $view_mode, $langcode) {
@@ -155,21 +154,26 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  */
 function viu_simple_faq_entity_insert($entity, $type) {
   sdpm($entity);
-  //TODO Double check this conditional doesn't fire when it's not supposed to (i.e. on edit pages)
+  //TODO Double check this conditional doesn't fire when it's not supposed to (e.g. on edit pages)
   if ($type == 'node' && $entity->type == 'oa_section') {
     if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
 
       //Gather information we need for the name of the new taxonomy vocabulary:
-      $og_context = og_context();
-      $group = node_load($og_context['gid']);
-      //TODO make sure that the group context exists (add error checking)
-      //TODO add support for subsites (talk to Darryl about use cases)
+      if ($og_context = og_context()) {
+        $group = node_load($og_context['gid']);
+        //TODO add support for subsites (talk to Darryl about use cases)
+      } else {
+        drupal_set_message("No og_context detected for taxonomy creation, aborting.", 'error', FALSE);
+        watchdog('viu_simple_faq', 'FAQ section - No og_context() detected for FAQ categories vocabulary', array(), WATCHDOG_WARNING);
+        return;
+      }
 
       //Generate machine name for new vocabulary AND check to make sure it's not a duplicate
       $machine_name = str_replace(array('-', ' ',), '_', strtolower($group->title)) . "_default_faq_categories";
 
-      // Set the static variable to "skip" to prevent altering while we verify
-      // the machine name doesn't exist yet.
+      // Set the og_vocab_query_taxonomy_vocabulary_load_multiple_alter static
+      // variable to "skip" to prevent altering while we verify the machine name
+      // doesn't exist yet. (Small performance hit here)
       $cache = &drupal_static('og_vocab_query_taxonomy_vocabulary_load_multiple_alter', FALSE);
       $cache = 'skip';
 
@@ -196,23 +200,24 @@ function viu_simple_faq_entity_insert($entity, $type) {
       );
 
       //TODO error checking here (based on return value, throw a drupal_set_msg or error)
+      // Perhaps check the name of the created taxonomy, and then set some flag if it's a non-standard machine name
       switch (taxonomy_vocabulary_save($vocabulary)) {
         case SAVED_NEW:
           drupal_set_message(t('Created new vocabulary %name.', array('%name' => $vocabulary->name)));
-          watchdog('taxonomy', 'Created new vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
+          watchdog('viu_simple_faq', 'Created new vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
           break;
 
-        default:
+        default: //TODO perhaps use this is a test condition for error checking - Undo steps up to this point?
           drupal_set_message(t('Updated vocabulary %name.', array('%name' => $vocabulary->name)));
-          watchdog('taxonomy', 'Updated vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
+          watchdog('viu_simple_faq', 'Updated vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
           break;
-      
+      }
+
       //Relate group to vocab
       $og_vocab_relation = array (
         'group_type' => $og_context['group_type'],
         'gid' => $og_context['gid'],
       );
-      //TODO Add error check (returns false on failure)
       $vocabulary = taxonomy_vocabulary_machine_name_load($machine_name);
       $vid = $vocabulary->vid;
       og_vocab_relation_save($vid, $og_vocab_relation['group_type'], $og_vocab_relation['gid']);
@@ -228,7 +233,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
       $field_name = key(og_vocab_get_og_vocab_fields('node', 'viu_simple_faq_question'));
       $og_vocab = og_vocab_create_og_vocab($vid, $og_vocab_relation['group_type'], 'viu_simple_faq_question', $field_name, $og_vocab_settings);
 
-      //TODO Error checking
+      //Run the og_vocab save method (duplication of default behaviour)
       $og_vocab->save();
 
       sdpm($vocabulary);
@@ -242,6 +247,8 @@ function viu_simple_faq_entity_insert($entity, $type) {
  * Implements hook_entity_update().
  *
  * For development only, to retrieve Section Default Term properties (for export)
+ *
+ * TODO - Remove taxonomy vocabulary (default) on section deletion
  */
 function viu_simple_faq_entity_update($entity, $type) {
   //sdpm($entity);

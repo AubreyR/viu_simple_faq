@@ -106,6 +106,12 @@ function viu_simple_faq_entity_info_alter(&$entity_info) {
 
 /**
  * Access callback for managing FAQ nodes
+ *
+ * @param $node
+ *  The current node object (i.e. section page)
+ * 
+ * @return bool
+ *  TRUE if access is allowed
  */
 function _viu_simple_faq_access_callback($node) {
   //TODO Limit to only FAQ sections
@@ -117,6 +123,15 @@ function _viu_simple_faq_access_callback($node) {
  */
 function _viu_simple_faq_manage_content($node) {
   drupal_goto(url('node/' . $node->nid . '/content'));
+}
+
+/**
+ *
+ *
+ * @param $node
+ */
+function _viu_simple_faq_manage_categories($node) {
+
 }
 
 /**

@@ -161,6 +161,7 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
+  sdpm($entity);
   //TODO Double check this conditional doesn't fire when it's not supposed to (e.g. on edit pages)
   if ($type == 'node' && $entity->type == 'oa_section') {
     if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
@@ -261,9 +262,12 @@ function viu_simple_faq_entity_update($entity, $type) {
  * Implements hook_form_FORM_ID_alter().
  *
  * Warn the user to remove content prior to or after section deletion
+ * Anything you want to do on section deletion can be added here.
  */
 function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $form_id) {
-  sdpm($form);
-  sdpm($form_state);
-  sdpm($form_id);
+  if (array_key_exists('#node', $form) && $form['#node']->type == 'oa_section') {
+    if ($form['#node']->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
+      $form['description']['#markup'] = t('Are you sure you want to do this?  This action cannot be undone and any remaining FAQ content and categories will be orphaned!');
+    }
+  }
 }

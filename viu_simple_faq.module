@@ -67,14 +67,6 @@ function viu_simple_faq_permission() {
  * Provide administration links on the section page
  */
 function viu_simple_faq_menu() {
-  /*$items['node/%node/faq_section'] = array(
-    'title' => 'FAQ Section Display',
-    'page callback' => 'node_page_default',
-    'access callback' => '_viu_simple_faq_access_callback',
-    'access arguments' => array(1),
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-  );*/// This works but only on the default node view page, not the panelizer/section page (I wonder why?)
-
   $items['node/%node/manage_faq'] = array(
     'title' => t('Manage FAQ Items'),
     'page callback' => '_viu_simple_faq_manage_content',
@@ -152,22 +144,6 @@ function _viu_simple_faq_manage_categories($node) {
 }
 
 /**
- * Implements hook_form_alter().
- *
- * @todo Deprecated - Can use this hook for viewing the data structures on node edit or creation (for FAQ section pages)
- */
-function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == "oa_section_node_form" && $form['#node_edit_form']) {
-    //sdpm($form);
-    //sdpm($form_state);
-    //dpm($form_id);
-    //sdpm($form_state['node']);
-    //$section_term_id = $form_state['node']->field_oa_section[LANGUAGE_NONE]['0']['tid'];
-    //$taxonomy = taxonomy_term_load($section_term_id);
-    //dpm($taxonomy);
-  }
-}
-/**
  * Implements hook_node_view().
  *
  * @todo FOR DEVELOPMENT ONLY (data structure inspection)
@@ -185,7 +161,6 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
-  sdpm($entity);
   //TODO Double check this conditional doesn't fire when it's not supposed to (e.g. on edit pages)
   if ($type == 'node' && $entity->type == 'oa_section') {
     if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
@@ -267,10 +242,6 @@ function viu_simple_faq_entity_insert($entity, $type) {
 
       //Run the og_vocab save method (duplication of default behaviour)
       $og_vocab->save();
-
-      //sdpm($vocabulary);
-
-      //sdpm($og_vocab);
     }
   }
 }
@@ -280,8 +251,19 @@ function viu_simple_faq_entity_insert($entity, $type) {
  *
  * For development only, to retrieve Section Default Term properties (for export)
  *
- * TODO - Remove taxonomy vocabulary (default) on section deletion
+ * TODO - Warn user to delete content and taxonomy vocabulary on section deletion
  */
 function viu_simple_faq_entity_update($entity, $type) {
-  //sdpm($entity);
+  sdpm($entity);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Warn the user to remove content prior to or after section deletion
+ */
+function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $form_id) {
+  sdpm($form);
+  sdpm($form_state);
+  sdpm($form_id);
 }

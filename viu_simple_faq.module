@@ -85,9 +85,10 @@ function viu_simple_faq_menu() {
     'weight' => -10,
   );
 
-  $items['node/%node/faq_categories/%section'] = array(
+  $items['node/%node/faq_categories'] = array(
     'title' => t('Manage FAQ Categories'),
     'page callback' => '_viu_simple_faq_manage_categories',
+    'page arguments' => array(1),
     'access callback' => '_viu_simple_faq_access_callback',
     'access arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
@@ -98,6 +99,8 @@ function viu_simple_faq_menu() {
 
 /**
  * Implements hook_entity_info_alter().
+ *
+ * @todo What is this for?  Development only?
  */
 function viu_simple_faq_entity_info_alter(&$entity_info) {
 //  $entity_info['taxonomy_vocabulary']['fieldable'] = TRUE;
@@ -107,31 +110,45 @@ function viu_simple_faq_entity_info_alter(&$entity_info) {
 /**
  * Access callback for managing FAQ nodes
  *
- * @param $node
- *  The current node object (i.e. section page)
- * 
  * @return bool
  *  TRUE if access is allowed
  */
 function _viu_simple_faq_access_callback($node) {
-  //TODO Limit to only FAQ sections
+  //TODO Limit to only FAQ sections (permissions?)
   return 'oa_section' == $node->type && user_access('access viu_simple_faq administration');
 }
 
 /**
- * Page routing mechanism for Manage FAQ menu tab
+ * Page routing mechanism for Manage FAQ content menu tab
+ *
+ * @param $node
+ *  The current node object (i.e. section page)
  */
 function _viu_simple_faq_manage_content($node) {
+  //Load the administrative view for that content
   drupal_goto(url('node/' . $node->nid . '/content'));
 }
 
 /**
- *
+ * Page routing mechanism for Manage Categories FAQ menu tab
  *
  * @param $node
+ *  The current node object (i.e. section page)
+ * @param $section
+ *  The section machine name
  */
 function _viu_simple_faq_manage_categories($node) {
+  //Get the primary site from the node
+  $group = node_load($node->og_group_ref[LANGUAGE_NONE][0]['target_id']);
 
+  //todo see if there are multiple vocabs associated with this section
+  //todo test/add subsite support
+
+  //Get the (default) machine name for the vocab from the group
+  $machine_name = str_replace(array('-', ' ',), '_', strtolower($group->title)) . "_default_faq_categories";
+
+  //load the admin view for that vocab(s?)
+  drupal_goto(url('admin/structure/taxonomy/' . $machine_name));
 }
 
 /**
@@ -251,9 +268,9 @@ function viu_simple_faq_entity_insert($entity, $type) {
       //Run the og_vocab save method (duplication of default behaviour)
       $og_vocab->save();
 
-      sdpm($vocabulary);
+      //sdpm($vocabulary);
 
-      sdpm($og_vocab);
+      //sdpm($og_vocab);
     }
   }
 }

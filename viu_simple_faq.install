@@ -26,11 +26,13 @@ function viu_simple_faq_disable() {
 
 /**
  * Implements hook_enable().
+ *
+ * @todo add watchdog log messages to errors and notices
+ * @todo implement proper exception handling
  */
 function viu_simple_faq_enable() {
   //Auto enable feature reversion
   features_revert_module('viu_simple_faq');
-  cache_clear_all('*', 'cache', TRUE);
 
   //Add contextual tabs buttons (pop-out)
   if (module_exists('contextual_tabs')) {
@@ -41,7 +43,29 @@ function viu_simple_faq_enable() {
       variable_set('contextual_tabs_extract', $contextual_tabs_extract . $faq_buttons);
       drupal_set_message('Added VIU Simple FAQ Contextual Tabs button rules');
     } else {
-      drupal_set_message('VIU Simple FAQ Contextual Tabs button rules already exists - not added');
+      drupal_set_message('VIU Simple FAQ Contextual Tabs button rules already exists - not added', 'notice');
     }
+  } else {
+    drupal_set_message('Contextual Tabs Module not installed/enabled, contextual tab rules not added', 'error');
   }
+
+  if (module_exists('admin_views')) {
+    //A list of views that we want enabled:
+    $key = 'admin_views_taxonomy_term';
+
+    //Grab a list of the default enabled/disabled views
+    $views_status = variable_get('views_defaults', array());
+
+    //Add our views to be enabled to the list
+    if (array_key_exists($key, $views_status)) {
+      $views_status[$key] = FALSE;
+    } else {
+      drupal_set_message('Administrative View: Taxonomy not detected, could not enable view display', 'error');
+    }
+  } else {
+    drupal_set_message('Administrative Views module not installed/enabled, taxonomy admin view not enabled', 'error');
+  }
+
+  //Clear caches
+  cache_clear_all('*', 'cache', TRUE);
 }

@@ -12,7 +12,7 @@ include_once 'viu_simple_faq.features.inc';
  * Views api is specified by features but we want to add the template directory.
  */
 function viu_simple_faq_views_api_alter(&$apis) {
-  if (!empty($apis['viu_simple_faq']) && $apis['viu_simple_faq']['api'] == '3.0') {
+  if (!empty($apis['viu_simple_faq']) && '3.0' == $apis['viu_simple_faq']['api']) {
     $apis['viu_simple_faq']['template path'] = drupal_get_path('module', 'viu_simple_faq') . '/templates/views';
   }
 }
@@ -162,9 +162,20 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  */
 function viu_simple_faq_entity_insert($entity, $type) {
   sdpm($entity);
+  //The following code block fires *after* FAQ section creation or deletion
+  if (property_exists($entity, 'type') && 'oa_delete' == $entity->type || 'oa_create' == $entity->type) {
+    $target = node_load($entity->field_oa_message_space[LANGUAGE_NONE][0]['target_id']);
+    sdpm($target);
+    //Clear the menu cache (update menu items)
+    //TODO WORKING HERE: CHECK THAT THIS ONLY FIRES WHEN IT'S SUPPOSED TO!!!  i.e. CHECK IF IT'S A SECTION
+    cache_clear_all('menu');
+  }
+
+
+  //The following code block fires just prior to (?? I think ??) FAQ section creation
   //TODO Double check this conditional doesn't fire when it's not supposed to (e.g. on edit pages)
-  if ($type == 'node' && $entity->type == 'oa_section') {
-    if ($entity->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
+  if ('node' == $type && 'oa_section' == $entity->type) {
+    if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
 
       //Gather information we need for the name of the new taxonomy vocabulary:
       if ($og_context = og_context()) {
@@ -190,6 +201,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
       if (taxonomy_vocabulary_machine_name_load($machine_name)) {
         // Start iterating over machine names until we hit one that doesn't
         // exist yet.
+        //todo consider using the section name instead (they can't both be called 'frequently asked quesitons')
         $i = 1;
         while (taxonomy_vocabulary_machine_name_load($machine_name)) {
           //ANOTE: You changed 48, it used to be 32 - test it
@@ -245,14 +257,15 @@ function viu_simple_faq_entity_insert($entity, $type) {
       $og_vocab->save();
     }
   }
+
+  //TODO add menu clear cache AFTER section deployment
+
 }
 
 /**
  * Implements hook_entity_update().
  *
  * For development only, to retrieve Section Default Term properties (for export)
- *
- * TODO - Warn user to delete content and taxonomy vocabulary on section deletion
  */
 function viu_simple_faq_entity_update($entity, $type) {
   sdpm($entity);
@@ -265,9 +278,9 @@ function viu_simple_faq_entity_update($entity, $type) {
  * Anything you want to do on section deletion can be added here.
  */
 function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $form_id) {
-  if (array_key_exists('#node', $form) && $form['#node']->type == 'oa_section') {
-    if ($form['#node']->panelizer['page_manager']->name == 'node:oa_section:simple_faq_section') {
-      $form['description']['#markup'] = t('Are you sure you want to do this?  This action cannot be undone and any remaining FAQ content and categories will be orphaned!');
+  if (array_key_exists('#node', $form) && 'oa_section' == $form['#node']->type) {
+    if ('node:oa_section:simple_faq_section' == $form['#node']->panelizer['page_manager']->name) {
+      $form['description']['#markup'] = t('Are you sure you want to do this?  Any remaining FAQ content and categories will be orphaned!');
     }
   }
 }

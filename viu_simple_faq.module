@@ -161,11 +161,11 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
-  sdpm($entity);
+  //sdpm($entity);
   //The following code block fires *after* FAQ section creation or deletion
   if (property_exists($entity, 'type') && ('oa_delete' == $entity->type || 'oa_create' == $entity->type)) {
     $target = node_load($entity->field_oa_message_space[LANGUAGE_NONE][0]['target_id']);
-    sdpm($target);
+    //sdpm($target);
     //Clear the menu cache (update menu items)
     //TODO WORKING HERE: CHECK THAT THIS ONLY FIRES WHEN IT'S SUPPOSED TO!!!  i.e. CHECK IF IT'S A SECTION
     //TODO WILL NOT FIRE ON OA DELETE: oa_delete message does not contain that particular property
@@ -287,5 +287,5 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
  * Implements hook_exit().
  */
 function viu_simple_faq_exit($destination = NULL) {
-  sdpm($destination);
+  //sdpm($destination);
 }

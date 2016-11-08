@@ -22,7 +22,7 @@ function viu_simple_faq_views_api_alter(&$apis) {
  *
  * We want to override the panels_bootstrap_pane hook and inject some HTML (for the fa-icon)
  */
-function viu_simple_faq_preprocess_panels_bootstrap_pane(&$vars) {
+function viu_simple_faq_preprocess_viu_panels_pane(&$vars) {
   //Target the Categories pane:
   if ('FAQ Categories' == $vars['title']) {
     $vars['title'] = '<span aria-hidden="true" class="icon-question"></span>&nbsp;' . $vars['title'];
@@ -213,7 +213,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
 
       //Generate new vocabulary
       $vocabulary = (object) array(
-        'name' => t($group->title . " Default FAQ Categories"),
+        'name' => t($group->title . " FAQ Categories"),
         'machine_name' => $machine_name,
         'description' => t('These are the default FAQ Categories for the ' . $group->title . ' section.'),
         'hierarchy' => '0',

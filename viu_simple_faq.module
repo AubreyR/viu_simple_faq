@@ -161,18 +161,6 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
-  //sdpm($entity);
-  //The following code block fires *after* FAQ section creation or deletion
-  if (property_exists($entity, 'type') && ('oa_delete' == $entity->type || 'oa_create' == $entity->type)) {
-    $target = node_load($entity->field_oa_message_space[LANGUAGE_NONE][0]['target_id']);
-    //sdpm($target);
-    //Clear the menu cache (update menu items)
-    //TODO WORKING HERE: CHECK THAT THIS ONLY FIRES WHEN IT'S SUPPOSED TO!!!  i.e. CHECK IF IT'S A SECTION
-    //TODO WILL NOT FIRE ON OA DELETE: oa_delete message does not contain that particular property
-    //cache_clear_all('menu');
-  }
-
-
   //The following code block fires just prior to (?? I think ??) FAQ section creation
   //TODO Double check this conditional doesn't fire when it's not supposed to (e.g. on edit pages)
   if ('node' == $type && 'oa_section' == $entity->type) {
@@ -181,6 +169,8 @@ function viu_simple_faq_entity_insert($entity, $type) {
       //Gather information we need for the name of the new taxonomy vocabulary:
       if ($og_context = og_context()) {
         $group = node_load($og_context['gid']);
+        sdpm($og_context);
+        sdpm($group);
         //TODO add support for subsites (talk to Darryl about use cases)
       } else {
         drupal_set_message("No og_context detected for taxonomy creation, aborting.", 'error', FALSE);
@@ -284,8 +274,9 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
 }
 
 /**
- * Implements hook_exit().
+ * Implements hook_entity_delete().
  */
-function viu_simple_faq_exit($destination = NULL) {
-  //sdpm($destination);
+function viu_simple_faq_entity_delete($entity, $type) {
+  sdpm($entity);
+  sdpm($type);
 }

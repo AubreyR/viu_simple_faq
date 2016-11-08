@@ -279,4 +279,25 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
 function viu_simple_faq_entity_delete($entity, $type) {
   sdpm($entity);
   sdpm($type);
+  //Conditional to determine if we are deleting a FAQ Section:
+  if ('node' == $type && 'oa_section' == $entity->type) {
+    if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
+      //Delete OG Vocab:
+
+    }
+  }
+}
+
+/**
+ * Wrapper function for Og Vocab relation delete (typo in original)
+ * Delete a relation between a group and a vocabulary and all its OG-vocabs.
+ *
+ * @param $entity_type
+ *   The entity type is deleted.
+ * @param $entity_id
+ *   The entity ID that is deleted.
+ *
+ */
+function og_vocab_relation_delete($entity_type, $entity_id, $vid = NULL) {
+  og_vocab_realtion_delete($entity_type, $entity_id, $vid);
 }

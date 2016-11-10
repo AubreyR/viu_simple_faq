@@ -179,7 +179,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
 
       //Generate new vocabulary
       $vocabulary = (object) array(
-        'name' => t($group->title . " FAQ Categories"),
+        'name' => t($group->title . " " . $entity->title),
         'machine_name' => $machine_name,
         'description' => t('These are the default FAQ Categories for the ' . $group->title . ' section.'),
         'hierarchy' => '0',

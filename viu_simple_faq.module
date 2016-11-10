@@ -33,16 +33,12 @@ function viu_simple_faq_preprocess_viu_panels_pane(&$vars) {
  * Implements hook_form_FORM_ID_alter().
  */
 function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $form_id) {
-  // TODO add conditional to check whether we are looking at a section page form (check taxonomy id)
-  sdpm($form);
-  sdpm($form_state);
-  sdpm($form_id);
-
-  //Find the section type through the node type:
+  //Find the section type through the term id:
   $tid = $form['#node']->field_oa_section[LANGUAGE_NONE][0]['tid'];
-
-  //TODO See if we can do these through the UI instead of here (configuration instead of customization)
-  if ($form['#node_edit_form']) {
+  $term = taxonomy_term_load($tid);
+  sdpm($term);
+  sdpm($term->name);
+  if ('Frequently Asked Questions' == $term->name && $form['#node_edit_form']) {
     if (NULL == $form['body'][LANGUAGE_NONE][0]['#default_value']) {
       $form['body'][LANGUAGE_NONE][0]['#default_value'] = t('Please feel free to contact us about other specific questions that you might have.');
     }

@@ -165,41 +165,19 @@ function viu_simple_faq_entity_insert($entity, $type) {
   //TODO Double check this conditional doesn't fire when it's not supposed to (e.g. on edit pages)
   if ('node' == $type && 'oa_section' == $entity->type) {
     if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
-
       //Gather information we need for the name of the new taxonomy vocabulary:
       if ($og_context = og_context()) {
         $group = node_load($og_context['gid']);
-        sdpm($og_context);
-        sdpm($group);
-        //TODO add support for subsites (talk to Darryl about use cases)
       } else {
         drupal_set_message("No og_context detected for taxonomy creation, aborting.", 'error', FALSE);
         watchdog('viu_simple_faq', 'FAQ section - No og_context() detected for FAQ categories vocabulary', array(), WATCHDOG_WARNING);
         return;
       }
 
-      //Generate machine name for new vocabulary AND check to make sure it's not a duplicate
-      $machine_name = str_replace(array('-', ' ',), '_', strtolower($group->title)) . "_default_faq_categories";
-
-      // Set the og_vocab_query_taxonomy_vocabulary_load_multiple_alter static
-      // variable to "skip" to prevent altering while we verify the machine name
-      // doesn't exist yet. (Small performance hit here)
-      $cache = &drupal_static('og_vocab_query_taxonomy_vocabulary_load_multiple_alter', FALSE);
-      $cache = 'skip';
-
-      //TODO Might need to do something about this if the user creates multiple taxonomies
-      // i.e. How are we going to retrieve the vocab in the "manage categories" tab callback?
-      if (taxonomy_vocabulary_machine_name_load($machine_name)) {
-        // Start iterating over machine names until we hit one that doesn't
-        // exist yet.
-        //todo consider using the section name instead (they can't both be called 'frequently asked quesitons')
-        $i = 1;
-        while (taxonomy_vocabulary_machine_name_load($machine_name)) {
-          //ANOTE: You changed 48, it used to be 32 - test it
-          $machine_name = substr($machine_name, 0, 48 - strlen($i)) . $i;
-          ++$i;
-        }
-      }
+      //Get the machine name of the section being created
+      //Couldn't find the actual machine name field so I take it from the field_url_name
+      //TODO test with manually entered URL alias
+      $machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
 
       //Generate new vocabulary
       $vocabulary = (object) array(
@@ -268,7 +246,7 @@ function viu_simple_faq_entity_update($entity, $type) {
 function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $form_id) {
   if (array_key_exists('#node', $form) && 'oa_section' == $form['#node']->type) {
     if ('node:oa_section:simple_faq_section' == $form['#node']->panelizer['page_manager']->name) {
-      $form['description']['#markup'] = t('Are you sure you want to do this?  Any remaining FAQ content and categories will be orphaned!');
+      $form['description']['#markup'] = t('Are you sure you want to do this?  FAQ Categories will be destroyed and any remaining FAQ items will be orphaned!');
     }
   }
 }
@@ -277,27 +255,12 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
  * Implements hook_entity_delete().
  */
 function viu_simple_faq_entity_delete($entity, $type) {
-  sdpm($entity);
-  sdpm($type);
-  //Conditional to determine if we are deleting a FAQ Section:
+  //Determine if we are deleting a FAQ Section:
   if ('node' == $type && 'oa_section' == $entity->type) {
     if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
-      //Delete OG Vocab:
-
+      $machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
+      $taxonomy = taxonomy_vocabulary_machine_name_load($machine_name);
+      taxonomy_vocabulary_delete($taxonomy->vid);
     }
   }
-}
-
-/**
- * Wrapper function for Og Vocab relation delete (typo in original)
- * Delete a relation between a group and a vocabulary and all its OG-vocabs.
- *
- * @param $entity_type
- *   The entity type is deleted.
- * @param $entity_id
- *   The entity ID that is deleted.
- *
- */
-function og_vocab_relation_delete($entity_type, $entity_id, $vid = NULL) {
-  og_vocab_realtion_delete($entity_type, $entity_id, $vid);
 }

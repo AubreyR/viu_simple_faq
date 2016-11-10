@@ -34,13 +34,15 @@ function viu_simple_faq_preprocess_viu_panels_pane(&$vars) {
  */
 function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $form_id) {
   // TODO add conditional to check whether we are looking at a section page form (check taxonomy id)
+  sdpm($form);
+  sdpm($form_state);
+  sdpm($form_id);
+
+  //Find the section type through the node type:
+  $tid = $form['#node']->field_oa_section[LANGUAGE_NONE][0]['tid'];
 
   //TODO See if we can do these through the UI instead of here (configuration instead of customization)
   if ($form['#node_edit_form']) {
-    if (NULL == $form['title']['#default_value']) {
-      $form['title']['#default_value'] = t('Frequently Asked Questions');
-      $form['title']['#description'] = t('The title of this section on your website.');
-    };
     if (NULL == $form['body'][LANGUAGE_NONE][0]['#default_value']) {
       $form['body'][LANGUAGE_NONE][0]['#default_value'] = t('Please feel free to contact us about other specific questions that you might have.');
     }
@@ -196,7 +198,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
           watchdog('viu_simple_faq', 'Created new vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
           break;
 
-        default: //TODO perhaps use this is a test condition for error checking - Undo steps up to this point?
+        default: //TODO May be entirely superfluous?
           drupal_set_message(t('Updated vocabulary %name.', array('%name' => $vocabulary->name)));
           watchdog('viu_simple_faq', 'Updated vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
           break;

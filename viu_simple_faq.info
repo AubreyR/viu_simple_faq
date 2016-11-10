@@ -43,7 +43,6 @@ features[field_instance][] = node-viu_simple_faq_question-og_group_ref
 features[field_instance][] = node-viu_simple_faq_question-og_vocabulary
 features[node][] = viu_simple_faq_question
 features[panelizer_defaults][] = node:oa_section:simple_faq_section
-features[taxonomy][] = faq_categories
 features[uuid_term][] = b8314cd7-46b2-480f-ac52-ba3f1fa9696e
 features[variable][] = field_bundle_settings_node__viu_simple_faq_question
 features[variable][] = menu_options_viu_simple_faq_question

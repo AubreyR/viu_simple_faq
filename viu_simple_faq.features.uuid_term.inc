@@ -17,7 +17,14 @@ function viu_simple_faq_uuid_features_default_terms() {
     'weight' => 0,
     'uuid' => 'b8314cd7-46b2-480f-ac52-ba3f1fa9696e',
     'vocabulary_machine_name' => 'section_type',
-    'field_oa_icon_class' => array(),
+    'field_oa_icon_class' => array(
+      'und' => array(
+        0 => array(
+          'value' => 'fa-question-circle-o',
+          'format' => NULL,
+        ),
+      ),
+    ),
     'field_oa_icon_image' => array(),
     'field_oa_section_type_menu' => array(
       'und' => array(

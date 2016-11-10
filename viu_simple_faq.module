@@ -131,14 +131,14 @@ function _viu_simple_faq_manage_categories($node) {
   //Get the primary site from the node
   $group = node_load($node->og_group_ref[LANGUAGE_NONE][0]['target_id']);
 
-  //todo see if there are multiple vocabs associated with this section
-  //todo test/add subsite support
+  sdpm($node);
+  sdpm($group);
 
   //Get the (default) machine name for the vocab from the group
-  $machine_name = str_replace(array('-', ' ',), '_', strtolower($group->title)) . "_default_faq_categories";
+  //$machine_name =
 
   //load the admin view for that vocab(s?)
-  drupal_goto(url('admin/structure/taxonomy/' . $machine_name));
+  drupal_goto(url('admin/structure/taxonomy/' . $node->field_url_name[LANGUAGE_NONE][0]['machine']));
 }
 
 /**

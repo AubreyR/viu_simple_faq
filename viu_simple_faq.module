@@ -36,8 +36,6 @@ function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $f
   //Find the section type through the term id:
   $tid = $form['#node']->field_oa_section[LANGUAGE_NONE][0]['tid'];
   $term = taxonomy_term_load($tid);
-  sdpm($term);
-  sdpm($term->name);
   if ('Frequently Asked Questions' == $term->name && $form['#node_edit_form']) {
     if (NULL == $form['body'][LANGUAGE_NONE][0]['#default_value']) {
       $form['body'][LANGUAGE_NONE][0]['#default_value'] = t('Please feel free to contact us about other specific questions that you might have.');
@@ -137,8 +135,9 @@ function _viu_simple_faq_manage_categories($node) {
   //Get the (default) machine name for the vocab from the group
   //$machine_name =
 
+  $tid = taxonomy_vocabulary_machine_name_load($node->field_url_name[LANGUAGE_NONE][0]['machine']);
   //load the admin view for that vocab(s?)
-  drupal_goto(url('admin/structure/taxonomy/' . $node->field_url_name[LANGUAGE_NONE][0]['machine']));
+  drupal_goto(url('node/' . $node->nid . '/terms/' . $tid));
 }
 
 /**

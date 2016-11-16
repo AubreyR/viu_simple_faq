@@ -19,9 +19,10 @@ function viu_simple_faq_disable() {
       variable_set('contextual_tabs_extract', $contextual_tabs_extract);
       drupal_set_message('Removed VIU Simple FAQ Contextual Tabs button rules');
     } else {
-      drupal_set_message('WARNING: unable to find stock VIU Simple FAQ Contextual Tabs button rules, may require attention.');
+      drupal_set_message('Unable to find stock VIU Simple FAQ Contextual Tabs button rules, may require attention.', 'warning');
     }
-  }
+  } else {
+    drupal_set_message('Dependency not found: Contextual Tabs Module', 'warning');
 }
 
 /**
@@ -47,23 +48,6 @@ function viu_simple_faq_enable() {
     }
   } else {
     drupal_set_message('Contextual Tabs Module not installed/enabled, contextual tab rules not added', 'error');
-  }
-
-  if (module_exists('admin_views')) {
-    //A list of views that we want enabled:
-    $key = 'admin_views_taxonomy_term';
-
-    //Grab a list of the default enabled/disabled views
-    $views_status = variable_get('views_defaults', array());
-
-    //Add our views to be enabled to the list
-    if (array_key_exists($key, $views_status)) {
-      $views_status[$key] = FALSE;
-    } else {
-      drupal_set_message('Administrative View: Taxonomy not detected, could not enable view display', 'error');
-    }
-  } else {
-    drupal_set_message('Administrative Views module not installed/enabled, taxonomy admin view not enabled', 'error');
   }
 
   //Clear caches

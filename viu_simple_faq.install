@@ -50,6 +50,9 @@ function viu_simple_faq_enable() {
     drupal_set_message('Contextual Tabs Module not installed/enabled, contextual tab rules not added', 'error');
   }
 
+  //TODO Make sure that the "Open Atrium Content Admin (Content) view is enabled
+  //TODO Make sure that the Page Manager Panels display defining the admin path /node/%node/content exists
+
   //Clear caches
   cache_clear_all('*', 'cache', TRUE);
 }

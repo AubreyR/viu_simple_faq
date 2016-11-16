@@ -61,6 +61,7 @@ function viu_simple_faq_permission() {
  * Implements hook_menu().
  *
  * Provide administration links on the section page
+ * @TODO Make sure that these menu tabs don't appear in other sections (discretize to the same parent either with path or access callback)
  */
 function viu_simple_faq_menu() {
   $items['node/%node/manage_faq'] = array(
@@ -147,7 +148,7 @@ function _viu_simple_faq_manage_categories($node) {
  *
  */
 function viu_simple_faq_node_view($node, $view_mode, $langcode) {
-  sdpm($node);
+  //sdpm($node);
 }
 
 /**

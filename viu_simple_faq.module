@@ -120,28 +120,9 @@ function _viu_simple_faq_manage_content($node) {
  *  The section machine name
  */
 function _viu_simple_faq_manage_categories($node) {
-  //Get the primary site from the node
-  $group = node_load($node->og_group_ref[LANGUAGE_NONE][0]['target_id']);
-
-  sdpm($node);
-  sdpm($group);
-
-  //Get the (default) machine name for the vocab from the group
-  //$machine_name =
-
   $tid = taxonomy_vocabulary_machine_name_load($node->field_url_name[LANGUAGE_NONE][0]['machine']);
-  //load the admin view for that vocab(s?)
+  //load the admin view for that vocab
   drupal_goto(url('node/' . $node->nid . '/terms/' . $tid));
-}
-
-/**
- * Implements hook_node_view().
- *
- * @todo FOR DEVELOPMENT ONLY (data structure inspection)
- *
- */
-function viu_simple_faq_node_view($node, $view_mode, $langcode) {
-  //sdpm($node);
 }
 
 /**
@@ -152,8 +133,6 @@ function viu_simple_faq_node_view($node, $view_mode, $langcode) {
  * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
-  //The following code block fires just prior to (?? I think ??) FAQ section creation
-  //TODO Double check this conditional doesn't fire when it's not supposed to (e.g. on edit pages)
   if ('node' == $type && 'oa_section' == $entity->type) {
     if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
       //Gather information we need for the name of the new taxonomy vocabulary:
@@ -166,8 +145,6 @@ function viu_simple_faq_entity_insert($entity, $type) {
       }
 
       //Get the machine name of the section being created
-      //Couldn't find the actual machine name field so I take it from the field_url_name
-      //TODO test with manually entered URL alias
       $machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
 
       //Generate new vocabulary
@@ -187,7 +164,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
           watchdog('viu_simple_faq', 'Created new vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
           break;
 
-        default: //TODO May be entirely superfluous?
+        default: //TODO May be entirely superfluous, or use for error case
           drupal_set_message(t('Updated vocabulary %name.', array('%name' => $vocabulary->name)));
           watchdog('viu_simple_faq', 'Updated vocabulary %name.', array('%name' => $vocabulary->name), WATCHDOG_NOTICE, l(t('edit'), 'admin/structure/taxonomy/' . $vocabulary->machine_name . '/edit'));
           break;
@@ -217,15 +194,6 @@ function viu_simple_faq_entity_insert($entity, $type) {
       $og_vocab->save();
     }
   }
-}
-
-/**
- * Implements hook_entity_update().
- *
- * For development only, to retrieve Section Default Term properties (for export)
- */
-function viu_simple_faq_entity_update($entity, $type) {
-  sdpm($entity);
 }
 
 /**

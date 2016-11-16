@@ -120,9 +120,9 @@ function _viu_simple_faq_manage_content($node) {
  *  The section machine name
  */
 function _viu_simple_faq_manage_categories($node) {
-  $tid = taxonomy_vocabulary_machine_name_load($node->field_url_name[LANGUAGE_NONE][0]['machine']);
+  $vocabulary = taxonomy_vocabulary_machine_name_load($node->field_url_name[LANGUAGE_NONE][0]['machine']);
   //load the admin view for that vocab
-  drupal_goto(url('node/' . $node->nid . '/terms/' . $tid));
+  drupal_goto(url('node/' . $node->nid . '/terms/' . $vocabulary->vid));
 }
 
 /**

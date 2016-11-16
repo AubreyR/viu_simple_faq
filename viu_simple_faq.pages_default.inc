@@ -153,10 +153,10 @@ function viu_simple_faq_default_page_manager_pages() {
   $display->content = array();
   $display->panels = array();
   $pane = new stdClass();
-  $pane->pid = 'new-50cb6ef4-6927-4a0e-a3f9-997f0c5a8089';
+  $pane->pid = 'new-7f5668c2-13b5-48d8-9130-4aca9524ec41';
   $pane->panel = 'contentmain';
   $pane->type = 'views_panes';
-  $pane->subtype = 'admin_views_taxonomy_term-section_terms';
+  $pane->subtype = 'simple_faq_taxonomy_terms-section_terms';
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
@@ -174,7 +174,7 @@ function viu_simple_faq_default_page_manager_pages() {
     'override_title_text' => '',
     'override_title_heading' => 'h2',
     'view_settings' => 'table',
-    'header_type' => 'titles',
+    'header_type' => 'none',
     'view_mode' => 'full',
     'widget_title' => '',
   );
@@ -220,9 +220,9 @@ function viu_simple_faq_default_page_manager_pages() {
   $pane->extras = array();
   $pane->position = 0;
   $pane->locks = array();
-  $pane->uuid = '50cb6ef4-6927-4a0e-a3f9-997f0c5a8089';
-  $display->content['new-50cb6ef4-6927-4a0e-a3f9-997f0c5a8089'] = $pane;
-  $display->panels['contentmain'][0] = 'new-50cb6ef4-6927-4a0e-a3f9-997f0c5a8089';
+  $pane->uuid = '7f5668c2-13b5-48d8-9130-4aca9524ec41';
+  $display->content['new-7f5668c2-13b5-48d8-9130-4aca9524ec41'] = $pane;
+  $display->panels['contentmain'][0] = 'new-7f5668c2-13b5-48d8-9130-4aca9524ec41';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;

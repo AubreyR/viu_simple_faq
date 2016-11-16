@@ -23,6 +23,7 @@ function viu_simple_faq_disable() {
     }
   } else {
     drupal_set_message('Dependency not found: Contextual Tabs Module', 'warning');
+  }
 }
 
 /**

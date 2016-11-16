@@ -97,14 +97,17 @@ function viu_simple_faq_entity_info_alter(&$entity_info) {
 }
 
 /**
- * Access callback for managing FAQ nodes
+ * Access callback for managing FAQ node and term menu tabs
  *
  * @return bool
  *  TRUE if access is allowed
  */
 function _viu_simple_faq_access_callback($node) {
-  //TODO Limit to only FAQ sections (permissions?)
-  return 'oa_section' == $node->type && user_access('access viu_simple_faq administration');
+  return (   'oa_section' == $node->type && user_access('access viu_simple_faq administration')
+          && property_exists($node, 'panelizer')
+          && array_key_exists('page_manager', $node->panelizer)
+          && property_exists($node->panelizer['page_manager'], 'name')
+          && 'node:oa_section:simple_faq_section' == $node->panelizer['page_manager']->name);
 }
 
 /**

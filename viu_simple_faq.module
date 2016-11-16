@@ -61,7 +61,7 @@ function viu_simple_faq_permission() {
  * Implements hook_menu().
  *
  * Provide administration links on the section page
- * @TODO Make sure that these menu tabs don't appear in other sections (discretize to the same parent either with path or access callback)
+ *
  */
 function viu_simple_faq_menu() {
   $items['node/%node/manage_faq'] = array(
@@ -84,16 +84,6 @@ function viu_simple_faq_menu() {
   );
 
   return $items;
-}
-
-/**
- * Implements hook_entity_info_alter().
- *
- * @todo What is this for?  Development only?
- */
-function viu_simple_faq_entity_info_alter(&$entity_info) {
-//  $entity_info['taxonomy_vocabulary']['fieldable'] = TRUE;
-//  sdpm($entity_info);
 }
 
 /**

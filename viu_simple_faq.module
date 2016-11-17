@@ -83,6 +83,8 @@ function viu_simple_faq_menu() {
     'type' => MENU_LOCAL_TASK,
   );
 
+  //$items['node/%node/faq_categories/add']
+
   return $items;
 }
 
@@ -122,7 +124,7 @@ function _viu_simple_faq_manage_content($node) {
 function _viu_simple_faq_manage_categories($node) {
   $vocabulary = taxonomy_vocabulary_machine_name_load($node->field_url_name[LANGUAGE_NONE][0]['machine']);
   //load the admin view for that vocab
-  drupal_goto(url('node/' . $node->nid . '/terms/' . $vocabulary->vid));
+  drupal_goto(url('node/' . $node->nid . '/faq_categories/' . $vocabulary->vid));
 }
 
 /**
@@ -207,6 +209,17 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
     if ('node:oa_section:simple_faq_section' == $form['#node']->panelizer['page_manager']->name) {
       $form['description']['#markup'] = t('Are you sure you want to do this?  FAQ Categories will be destroyed and any remaining FAQ items will be orphaned!');
     }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
+  if ('taxonomy_form_term' ==$form_id) {
+    sdpm($form);
+    sdpm($form_state);
+    sdpm($form_id);
   }
 }
 

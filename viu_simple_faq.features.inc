@@ -12,12 +12,12 @@ function viu_simple_faq_default_command_button() {
   $items['viu_simple_faq_question'] = entity_import('command_button', '{
     "bundle" : "node_add",
     "name" : "viu_simple_faq_question",
-    "title" : "Create Simple FAQ - Q\\u0026A Pair",
+    "title" : "Create Simple FAQ Item",
     "language" : "und",
     "field_command_link" : { "und" : [
         {
           "url" : "node\\/add\\/viu-simple-faq-question",
-          "title" : "Create Simple FAQ - Q\\u0026A Pair",
+          "title" : "Create Simple FAQ Item",
           "attributes" : []
         }
       ]
@@ -57,7 +57,7 @@ function viu_simple_faq_views_api($module = NULL, $api = NULL) {
 function viu_simple_faq_node_info() {
   $items = array(
     'viu_simple_faq_question' => array(
-      'name' => t('Simple FAQ - Q&A Pair'),
+      'name' => t('Simple FAQ Item'),
       'base' => 'node_content',
       'description' => t('Question and answer pair created by a site admin/editor to display on a single site.  This entry will be displayed on a Simple FAQ Page and in Simple FAQ content panes.'),
       'has_title' => '1',

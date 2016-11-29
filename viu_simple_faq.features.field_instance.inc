@@ -224,7 +224,7 @@ function viu_simple_faq_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Defaults to the site in which you created this FAQ Item.  If you wish this Q&A pair to appear in other sites, you can select them in the menu below.',
+    'description' => 'Defaults to the site in which you created this Q&A Pair.  If you wish this Q&A pair to appear in other sites, you can select them in the menu below.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -387,7 +387,7 @@ function viu_simple_faq_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Answer');
   t('Answer the question.');
-  t('Defaults to the site in which you created this FAQ Item.  If you wish this Q&A pair to appear in other sites, you can select them in the menu below.');
+  t('Defaults to the site in which you created this Q&A Pair.  If you wish this Q&A pair to appear in other sites, you can select them in the menu below.');
   t('FAQ Categories');
   t('Primary Site');
   t('Section');

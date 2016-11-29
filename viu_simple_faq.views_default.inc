@@ -93,21 +93,20 @@ function viu_simple_faq_views_default_views() {
   $handler->display->display_options['sorts']['name']['id'] = 'name';
   $handler->display->display_options['sorts']['name']['table'] = 'taxonomy_term_data';
   $handler->display->display_options['sorts']['name']['field'] = 'name';
-  /* Contextual filter: Taxonomy vocabulary: Machine name */
-  $handler->display->display_options['arguments']['machine_name']['id'] = 'machine_name';
-  $handler->display->display_options['arguments']['machine_name']['table'] = 'taxonomy_vocabulary';
-  $handler->display->display_options['arguments']['machine_name']['field'] = 'machine_name';
-  $handler->display->display_options['arguments']['machine_name']['title_enable'] = TRUE;
-  $handler->display->display_options['arguments']['machine_name']['title'] = 'Terms in %1';
-  $handler->display->display_options['arguments']['machine_name']['breadcrumb_enable'] = TRUE;
-  $handler->display->display_options['arguments']['machine_name']['breadcrumb'] = '%1';
-  $handler->display->display_options['arguments']['machine_name']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['machine_name']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['machine_name']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['machine_name']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['machine_name']['specify_validation'] = TRUE;
-  $handler->display->display_options['arguments']['machine_name']['validate']['fail'] = 'ignore';
-  $handler->display->display_options['arguments']['machine_name']['limit'] = '0';
+  /* Contextual filter: Taxonomy vocabulary: Vocabulary ID */
+  $handler->display->display_options['arguments']['vid']['id'] = 'vid';
+  $handler->display->display_options['arguments']['vid']['table'] = 'taxonomy_vocabulary';
+  $handler->display->display_options['arguments']['vid']['field'] = 'vid';
+  $handler->display->display_options['arguments']['vid']['default_action'] = 'empty';
+  $handler->display->display_options['arguments']['vid']['title_enable'] = TRUE;
+  $handler->display->display_options['arguments']['vid']['title'] = 'Categories for %1';
+  $handler->display->display_options['arguments']['vid']['breadcrumb_enable'] = TRUE;
+  $handler->display->display_options['arguments']['vid']['breadcrumb'] = '%1 Categories';
+  $handler->display->display_options['arguments']['vid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['vid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['vid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['vid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['vid']['specify_validation'] = TRUE;
 
   /* Display: Section Terms */
   $handler = $view->new_display('panel_pane', 'Section Terms', 'faq_section_terms');
@@ -145,22 +144,6 @@ function viu_simple_faq_views_default_views() {
   $handler->display->display_options['fields']['tid']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['tid']['alter']['path'] = 'taxonomy/term/[tid]/edit';
   $handler->display->display_options['fields']['tid']['separator'] = '';
-  $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Taxonomy vocabulary: Vocabulary ID */
-  $handler->display->display_options['arguments']['vid']['id'] = 'vid';
-  $handler->display->display_options['arguments']['vid']['table'] = 'taxonomy_vocabulary';
-  $handler->display->display_options['arguments']['vid']['field'] = 'vid';
-  $handler->display->display_options['arguments']['vid']['default_action'] = 'empty';
-  $handler->display->display_options['arguments']['vid']['title_enable'] = TRUE;
-  $handler->display->display_options['arguments']['vid']['title'] = 'Categories for %1';
-  $handler->display->display_options['arguments']['vid']['breadcrumb_enable'] = TRUE;
-  $handler->display->display_options['arguments']['vid']['breadcrumb'] = '%1 Categories';
-  $handler->display->display_options['arguments']['vid']['default_argument_type'] = 'php';
-  $handler->display->display_options['arguments']['vid']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['vid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['vid']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['vid']['specify_validation'] = TRUE;
-  $handler->display->display_options['arguments']['vid']['validate']['fail'] = 'empty';
   $handler->display->display_options['pane_category']['name'] = 'Simple FAQ';
   $handler->display->display_options['pane_category']['weight'] = '0';
   $handler->display->display_options['allow']['use_pager'] = 0;

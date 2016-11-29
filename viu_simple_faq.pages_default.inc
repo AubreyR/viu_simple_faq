@@ -153,69 +153,6 @@ function viu_simple_faq_default_page_manager_pages() {
   $display->content = array();
   $display->panels = array();
   $pane = new stdClass();
-  $pane->pid = 'new-0525521b-9475-4ca9-b717-68318289ce68';
-  $pane->panel = 'contentmain';
-  $pane->type = 'oa_core_node_token';
-  $pane->subtype = 'oa_core_node_token';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'token_title' => '',
-    'token_body' => array(
-      'value' => '<a href="/admin/structure/taxonomy/[node:field-url-name:machine]/add" class="btn btn-primary btn-sm">Add Category</a>',
-      'format' => 'panopoly_html_text',
-    ),
-    'context' => 'argument_entity_id:node_1',
-    'override_title' => '',
-    'override_title_text' => '',
-    'override_title_heading' => 'h2',
-  );
-  $pane->cache = array();
-  $pane->style = array(
-    'style' => 'bootstrap_styles:normal',
-    'settings' => array(
-      'heading_style_class' => '',
-      'hide_classes' => array(
-        'hidden-xs' => 0,
-        'hidden-sm' => 0,
-        'hidden-md' => 0,
-        'hidden-lg' => 0,
-      ),
-      'additional_classes' => array(
-        'pane-outline' => 0,
-        'pane-outline-thick' => 0,
-        'pane-border-top' => 0,
-        'no-padding' => 0,
-        'no-margin' => 0,
-        'margin-bottom-5' => 0,
-        'margin-bottom-10' => 0,
-        'margin-bottom-15' => 0,
-        'margin-bottom-20' => 0,
-        'margin-bottom-25' => 0,
-        'margin-bottom-30' => 1,
-        'margin-bottom-35' => 0,
-        'margin-bottom-40' => 0,
-        'margin-bottom-45' => 0,
-        'margin-bottom-50' => 0,
-        'margin-bottom-55' => 0,
-        'margin-bottom-60' => 0,
-        'margin-bottom-100' => 0,
-        'margin-top-20' => 0,
-        'margin-left-5' => 0,
-        'margin-left-10' => 0,
-        'margin-right-5' => 0,
-        'margin-right-10' => 0,
-      ),
-    ),
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 0;
-  $pane->locks = array();
-  $pane->uuid = '0525521b-9475-4ca9-b717-68318289ce68';
-  $display->content['new-0525521b-9475-4ca9-b717-68318289ce68'] = $pane;
-  $display->panels['contentmain'][0] = 'new-0525521b-9475-4ca9-b717-68318289ce68';
-  $pane = new stdClass();
   $pane->pid = 'new-b36cd97c-4c40-44e1-895f-2035c6485163';
   $pane->panel = 'contentmain';
   $pane->type = 'views_panes';
@@ -280,11 +217,11 @@ function viu_simple_faq_default_page_manager_pages() {
   );
   $pane->css = array();
   $pane->extras = array();
-  $pane->position = 1;
+  $pane->position = 0;
   $pane->locks = array();
   $pane->uuid = 'b36cd97c-4c40-44e1-895f-2035c6485163';
   $display->content['new-b36cd97c-4c40-44e1-895f-2035c6485163'] = $pane;
-  $display->panels['contentmain'][1] = 'new-b36cd97c-4c40-44e1-895f-2035c6485163';
+  $display->panels['contentmain'][0] = 'new-b36cd97c-4c40-44e1-895f-2035c6485163';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;

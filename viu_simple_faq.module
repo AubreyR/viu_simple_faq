@@ -200,7 +200,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
       if ($og_context = og_context()) {
         $group = node_load($og_context['gid']);
       } else {
-        drupal_set_message("No og_context detected for taxonomy creation, aborting.", 'error', FALSE);
+        drupal_set_message("No og_context detected for taxonomy creation, please delete this section and try again from within a site or space.", 'error', FALSE);
         watchdog('viu_simple_faq', 'FAQ section - No og_context() detected for FAQ categories vocabulary', array(), WATCHDOG_WARNING);
         return;
       }
@@ -261,7 +261,6 @@ function viu_simple_faq_entity_insert($entity, $type) {
  * Implements hook_form_FORM_ID_alter().
  *
  * Warn the user to remove content prior to or after section deletion
- * TODO: Anything you want to do on section deletion can be added here.
  */
 function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $form_id) {
   if (array_key_exists('#node', $form) && 'oa_section' == $form['#node']->type) {
@@ -316,6 +315,8 @@ function _viu_simple_faq_form_cancel(&$form, &$form_state) {
 
 /**
  * Implements hook_entity_delete().
+ *
+ * We are going to delete the OG Vocabulary at this point
  */
 function viu_simple_faq_entity_delete($entity, $type) {
   //Determine if we are deleting a FAQ Section:

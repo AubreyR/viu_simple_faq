@@ -83,7 +83,17 @@ function viu_simple_faq_menu() {
     'type' => MENU_LOCAL_TASK,
   );
 
-  //$items['node/%node/faq_categories/add']
+  //Dependent on Page Manager Vocabulary Display Page
+  $items['node/%node/faq_categories/%taxonomy_vocabulary/add'] = array (
+    'title' => t('Add Category'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('taxonomy_form_term', array(),3),
+    'access callback' => '_viu_simple_faq_term_access_callback',
+    'access arguments' => array(1, 2),
+    'type'=> MENU_LOCAL_ACTION,
+    'file path' => 'modules/taxonomy',
+    'file' => 'taxonomy.admin.inc',
+  );
 
   return $items;
 }
@@ -100,6 +110,17 @@ function _viu_simple_faq_access_callback($node) {
           && array_key_exists('page_manager', $node->panelizer)
           && property_exists($node->panelizer['page_manager'], 'name')
           && 'node:oa_section:simple_faq_section' == $node->panelizer['page_manager']->name);
+}
+
+/**
+ * Access callback for adding category to a FAQ section
+ * @return bool
+ */
+function _viu_simple_faq_term_access_callback($node, $vocabulary) {
+  //TODO this is a dummy function for now
+  //sdpm($node);
+  //sdpm($vocabulary);
+  return TRUE;
 }
 
 /**
@@ -125,6 +146,21 @@ function _viu_simple_faq_manage_categories($node) {
   $vocabulary = taxonomy_vocabulary_machine_name_load($node->field_url_name[LANGUAGE_NONE][0]['machine']);
   //load the admin view for that vocab
   drupal_goto(url('node/' . $node->nid . '/faq_categories/' . $vocabulary->vid));
+}
+
+/**
+ * Page routing for FAQ Category form
+ *
+ * @param $form_id
+ * @param $vocabulary
+ */
+function _viu_simple_faq_get_term_form($form_id, $vocabulary) {
+  //sdpm($vocabulary);
+//  drupal_goto('/');
+
+  $form = drupal_get_form($form_id, array(), $vocabulary);
+  sdpm($form);
+  return $form;
 }
 
 /**
@@ -216,11 +252,29 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
  * Implements hook_form_alter().
  */
 function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
-  if ('taxonomy_form_term' ==$form_id) {
+  if ( 'taxonomy_form_term' == $form_id
+    && (strpos($form['#action'], 'faq_categories') !== FALSE)) {
+    $form['actions']['cancel'] = array(
+      '#type' => 'button',
+      '#value' => t('Cancel/Finish'),
+      '#markup' => l(t('Cancel'), strstr($form['#action'], '/add', TRUE)),
+      '#submit' => array('_viu_simple_faq_form_cancel'),
+      '#executes_submit_callback' => TRUE,
+      '#limit_validation_errors' => array(),
+    );
     sdpm($form);
     sdpm($form_state);
     sdpm($form_id);
   }
+}
+
+/**
+ * Custom cancel callback function for all content management forms
+ */
+function _viu_simple_faq_form_cancel(&$form, &$form_state) {
+  //TODO: Add checks to see which form this is being called form and route accordingly
+  //Following line works on Taxonomy form:
+  drupal_goto(strstr($form['#action'], '/add', TRUE));
 }
 
 /**

@@ -10,10 +10,12 @@
 function viu_simple_faq_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: 'administer panelizer taxonomy_term faq_categories defaults'.
-  $permissions['administer panelizer taxonomy_term faq_categories defaults'] = array(
-    'name' => 'administer panelizer taxonomy_term faq_categories defaults',
-    'roles' => array(),
+  // Exported permission: 'administer panelizer node viu_simple_faq_question defaults'.
+  $permissions['administer panelizer node viu_simple_faq_question defaults'] = array(
+    'name' => 'administer panelizer node viu_simple_faq_question defaults',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'panelizer',
   );
 
@@ -44,13 +46,6 @@ function viu_simple_faq_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: 'delete terms in faq_categories'.
-  $permissions['delete terms in faq_categories'] = array(
-    'name' => 'delete terms in faq_categories',
-    'roles' => array(),
-    'module' => 'taxonomy',
-  );
-
   // Exported permission: 'edit any viu_simple_faq_question content'.
   $permissions['edit any viu_simple_faq_question content'] = array(
     'name' => 'edit any viu_simple_faq_question content',
@@ -67,13 +62,6 @@ function viu_simple_faq_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'node',
-  );
-
-  // Exported permission: 'edit terms in faq_categories'.
-  $permissions['edit terms in faq_categories'] = array(
-    'name' => 'edit terms in faq_categories',
-    'roles' => array(),
-    'module' => 'taxonomy',
   );
 
   // Exported permission: 'trash any viu_simple_faq_question content'.

@@ -97,8 +97,8 @@ function viu_simple_faq_menu() {
 
   $items['node/%node/content/add'] = array (
     'title' => t('Create Simple FAQ - Q&A Pair'),
-    'page callback' => '_viu_simple_faq_content_add_callback',
-    'page arguments' => array(1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('viu_simple_faq_term_warning', 1),
     'access callback' => '_viu_simple_faq_content_access_callback',
     'access arguments' => array(1),
     'type'=> MENU_LOCAL_ACTION,
@@ -107,11 +107,38 @@ function viu_simple_faq_menu() {
   return $items;
 }
 
-/**
- * @param $node
- */
-function _viu_simple_faq_content_add_callback($node) {
+//WORKING HERE TO GENERATE THE CONFIRMATION FORM
+function viu_simple_faq_term_warning($form, $form_state, $node) {
+  //Test condition for empty categories here
+  $section_machine_name = $node->field_url_name[LANGUAGE_NONE][0]['machine'];
+  $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
+  $terms_array = taxonomy_get_tree($faq_categories->vid);
+  $term_count = sizeof($terms_array);
+  if(0 >= $term_count) {
+    //$node here is specific FAQ section node
+    $form['#node'] = $node;
+    //Provide entity id in the same for key as in the entity edit form (?)
+    $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
+    return confirm_form($form,
+      t('No FAQ Categories to add item to!'),
+      'node/' . $node->nid,
+      t('Each question and answer must be associated to a FAQ category'),
+      t('Add Category'),
+      t('Cancel')
+    );
+  }
+  //No else statement because I want a catchall here
+  //TODO not sure if a hard redirect is the correct way to do this
   drupal_goto('/node/add/viu-simple-faq-question', array('query' => array('oa_section_ref' => $node->nid)));
+}
+
+//WORKING HERE WARNING SUBMIT CALLBACK
+function viu_simple_faq_term_warning_submit($form, $form_state) {
+  $node = $form['#node'];
+  $section_machine_name = $node->field_url_name[LANGUAGE_NONE][0]['machine'];
+  $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
+  //TODO default action: go to the add categories form (nothing else to do here)
+  drupal_goto('node/' . $node->nid . '/faq_categories/' . $faq_categories->vid . '/add');
 }
 
 /**
@@ -258,7 +285,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter() for node_delete_confirm.
  *
  * Warn the user to remove content prior to or after section deletion
  */
@@ -302,10 +329,37 @@ function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
+ * Warning form for node creation when no OG Vocab terms have been created yet
+ *
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function viu_simple_faq_term_warning_form($form, &$form_state, $node) {
+//  $form['description'] = array(
+//    '#markup' => 'You have not created any FAQ categories to attach this FAQ item to!',
+//  );
+//
+//
+//
+//  $form['create_terms'] = array(
+//    '#type' => 'submit',
+//    '#value' => t('Create FAQ Categories'),
+//  );
+//
+//  $form['cancel'] = array(
+//    '#type' => 'submit',
+//    '#action' =>
+//  );
+//
+//  return $form;
+}
+
+/**
  * Custom cancel callback function for all content management forms
  */
 function _viu_simple_faq_form_cancel(&$form, &$form_state) {
-  if ('viu_simple_faq_question' == $form['#node']->type) {
+  if (array_key_exists('#node', $form) && 'viu_simple_faq_question' == $form['#node']->type) {
     drupal_goto('/node/' . $form['oa_section_ref'][LANGUAGE_NONE]['#value'] . '/content');
   } else {
     //Following line works on Taxonomy form:

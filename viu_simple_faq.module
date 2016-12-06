@@ -362,7 +362,7 @@ function _viu_simple_faq_form_cancel(&$form, &$form_state) {
   if (array_key_exists('#node', $form) && 'viu_simple_faq_question' == $form['#node']->type) {
     drupal_goto('/node/' . $form['oa_section_ref'][LANGUAGE_NONE]['#value'] . '/content');
   } else {
-    //Following line works on Taxonomy form:
+    //Following line works on Taxonomy form cancel button only:
     drupal_goto(strstr($form['#action'], '/add', TRUE));
   }
 }

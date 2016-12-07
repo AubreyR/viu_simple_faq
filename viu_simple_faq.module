@@ -107,7 +107,15 @@ function viu_simple_faq_menu() {
   return $items;
 }
 
-//WORKING HERE TO GENERATE THE CONFIRMATION FORM
+/**
+ * viu_simple_faq_term_warning form
+ *  presents a warning message when user attempts to create a new faq node without creating terms first
+ *
+ * @param $form
+ * @param $form_state
+ * @param $node
+ * @return mixed
+ */
 function viu_simple_faq_term_warning($form, $form_state, $node) {
   //Test condition for empty categories here
   $section_machine_name = $node->field_url_name[LANGUAGE_NONE][0]['machine'];
@@ -132,7 +140,12 @@ function viu_simple_faq_term_warning($form, $form_state, $node) {
   drupal_goto('/node/add/viu-simple-faq-question', array('query' => array('oa_section_ref' => $node->nid)));
 }
 
-//WORKING HERE WARNING SUBMIT CALLBACK
+/**
+ * viu_simple_faq_term_warning form submit handler
+ *
+ * @param $form
+ * @param $form_state
+ */
 function viu_simple_faq_term_warning_submit($form, $form_state) {
   $node = $form['#node'];
   $section_machine_name = $node->field_url_name[LANGUAGE_NONE][0]['machine'];
@@ -233,6 +246,9 @@ function viu_simple_faq_entity_insert($entity, $type) {
       }
 
       //Get the machine name of the section being created
+      //TODO NOTE: this goes against typical taxonomy naming conventions because
+      // taxonomy names typically have underscores instead of dashes (like node
+      // machine names do).
       $machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
 
       //Generate new vocabulary
@@ -326,33 +342,6 @@ function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
       '#weight' => 10,
     );
   }
-}
-
-/**
- * Warning form for node creation when no OG Vocab terms have been created yet
- *
- * @param $form
- * @param $form_state
- * @return mixed
- */
-function viu_simple_faq_term_warning_form($form, &$form_state, $node) {
-//  $form['description'] = array(
-//    '#markup' => 'You have not created any FAQ categories to attach this FAQ item to!',
-//  );
-//
-//
-//
-//  $form['create_terms'] = array(
-//    '#type' => 'submit',
-//    '#value' => t('Create FAQ Categories'),
-//  );
-//
-//  $form['cancel'] = array(
-//    '#type' => 'submit',
-//    '#action' =>
-//  );
-//
-//  return $form;
 }
 
 /**

@@ -57,7 +57,7 @@ function viu_simple_faq_views_api($module = NULL, $api = NULL) {
 function viu_simple_faq_node_info() {
   $items = array(
     'viu_simple_faq_question' => array(
-      'name' => t('Simple FAQ - Q&A Pair'),
+      'name' => t('FAQ Item'),
       'base' => 'node_content',
       'description' => t('Question and answer pair created by a site admin/editor to display on a single site.  This entry will be displayed on a Simple FAQ Page and in Simple FAQ content panes.'),
       'has_title' => '1',

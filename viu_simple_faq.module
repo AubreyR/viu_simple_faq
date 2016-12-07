@@ -96,7 +96,7 @@ function viu_simple_faq_menu() {
   );
 
   $items['node/%node/content/add'] = array (
-    'title' => t('Create Simple FAQ - Q&A Pair'),
+    'title' => t('Create FAQ Item'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('viu_simple_faq_term_warning', 1),
     'access callback' => '_viu_simple_faq_content_access_callback',

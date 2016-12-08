@@ -10,15 +10,6 @@
 function viu_simple_faq_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: 'administer panelizer node viu_simple_faq_question defaults'.
-  $permissions['administer panelizer node viu_simple_faq_question defaults'] = array(
-    'name' => 'administer panelizer node viu_simple_faq_question defaults',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'panelizer',
-  );
-
   // Exported permission: 'create viu_simple_faq_question content'.
   $permissions['create viu_simple_faq_question content'] = array(
     'name' => 'create viu_simple_faq_question content',

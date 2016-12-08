@@ -10,13 +10,6 @@
 function viu_simple_faq_og_features_default_permissions() {
   $permissions = array();
 
-  // Exported og permission: 'node:oa_group:administer panelizer node viu_simple_faq_question defaults'
-  $permissions['node:oa_group:administer panelizer node viu_simple_faq_question defaults'] = array(
-    'roles' => array(
-      'administrator member' => 'administrator member',
-    ),
-  );
-
   // Exported og permission: 'node:oa_group:create viu_simple_faq_question content'
   $permissions['node:oa_group:create viu_simple_faq_question content'] = array(
     'roles' => array(
@@ -81,13 +74,6 @@ function viu_simple_faq_og_features_default_permissions() {
     'roles' => array(
       'administrator member' => 'administrator member',
       'member' => 'member',
-    ),
-  );
-
-  // Exported og permission: 'node:oa_space:administer panelizer node viu_simple_faq_question defaults'
-  $permissions['node:oa_space:administer panelizer node viu_simple_faq_question defaults'] = array(
-    'roles' => array(
-      'administrator member' => 'administrator member',
     ),
   );
 

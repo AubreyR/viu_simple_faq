@@ -15,6 +15,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'create viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -24,6 +25,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'delete any viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -33,6 +35,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'delete own viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -42,6 +45,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'edit any viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -51,6 +55,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'edit own viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -60,6 +65,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'trash any viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'trash_flag',
   );
@@ -69,6 +75,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'trash own viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'trash_flag',
   );
@@ -78,6 +85,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'untrash any viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'trash_flag',
   );
@@ -87,6 +95,7 @@ function viu_simple_faq_user_default_permissions() {
     'name' => 'untrash own viu_simple_faq_question content',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'trash_flag',
   );

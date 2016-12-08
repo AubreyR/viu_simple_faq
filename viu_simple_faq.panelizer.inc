@@ -291,9 +291,9 @@ function viu_simple_faq_panelizer_defaults() {
     'override_title_text' => '',
     'override_title_heading' => 'h2',
     'og_menu_single_depth' => '0',
-    'og_menu_single_parent' => '0',
-    'form_build_id' => 'form-i4v-7wR9N7TDe2IcLHJa-kiPA_GWeZdjyH_VzNkrQkI',
-    'form_token' => 'PQVT8arRvZiHjY5WhLw1G7Yx9xJdpyzPrs8qBaSxZdg',
+    'og_menu_single_parent' => 'auto',
+    'form_build_id' => 'form-ksLq7fleZg4rPbSub0ohTg00SWISTkjbMQC7WbBQ_ds',
+    'form_token' => 'IC8vcDsef_8APXo_MkLGmPUGfEpGaQzNDUyWvhPpPHY',
     'form_id' => 'og_menu_single_pane_edit_form',
     'op' => 'Finish',
   );

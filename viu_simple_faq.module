@@ -50,6 +50,7 @@ function viu_simple_faq_form_oa_section_node_form_alter(&$form, &$form_state, $f
  * Implements hook_permission().
  */
 function viu_simple_faq_permission() {
+  //TODO This also might be exported via features, could be why it's doubled on deploy
   return array(
     'access viu_simple_faq administration' => array(
       'title' => t('Manage Simple FAQ'),
@@ -108,6 +109,38 @@ function viu_simple_faq_menu() {
 }
 
 /**
+ * Implements hook_node_prepare().
+ *
+ * @todo: attempted to get hook_prepare working but it would not get called
+ */
+function viu_simple_faq_node_prepare($node) {
+  $get_array = drupal_get_query_parameters();
+  $context = og_context();
+
+  //check node type
+  if (  'viu_simple_faq_question' == $node->type
+    && !empty($get_array)
+    && key_exists('oa_section_ref', $get_array)) {
+    $section = node_load($get_array['oa_section_ref']);
+    $section_machine_name = $section->field_url_name[LANGUAGE_NONE][0]['machine'];
+    $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
+    $terms_array = taxonomy_get_tree($faq_categories->vid);
+    $term_count = sizeof($terms_array);
+    if(0 >= $term_count) {
+      //Go to form
+    }
+
+    sdpm($section);
+    sdpm($get_array);
+    sdpm($context);
+    sdpm($node);
+  }
+  //check that there is a context
+  //check that there is a query parameter
+  //Test with no context or query parameter
+}
+
+/**
  * viu_simple_faq_term_warning form
  *  presents a warning message when user attempts to create a new faq node without creating terms first
  *
@@ -139,6 +172,8 @@ function viu_simple_faq_term_warning($form, $form_state, $node) {
   //TODO not sure if a hard redirect is the correct way to do this
   drupal_goto('/node/add/viu-simple-faq-question', array('query' => array('oa_section_ref' => $node->nid)));
 }
+
+//Split form out from conditional logic
 
 /**
  * viu_simple_faq_term_warning form submit handler

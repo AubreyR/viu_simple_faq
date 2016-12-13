@@ -110,43 +110,43 @@ function viu_simple_faq_menu() {
   return $items;
 }
 
-//function _viu_simple_faq_faq_add ($node) {
-//  //Section ID is the Node ID
-//  drupal_goto('/node/add/viu-simple-faq-question', array('query' => array('oa_section_ref' => $node->nid)));
-//}
-//
-///**
-// * Implements hook_node_prepare().
-// *
-// * @todo: attempted to get hook_prepare working but it would not get called
-// */
-//function viu_simple_faq_node_prepare($node) {
-//  $get_array = drupal_get_query_parameters();
-//  $context = og_context();
-//
-//  //check node type
-//  if (  'viu_simple_faq_question' == $node->type
-//    && !empty($get_array)
-//    && key_exists('oa_section_ref', $get_array)) {
-//    $section = node_load($get_array['oa_section_ref']);
-//    $section_machine_name = $section->field_url_name[LANGUAGE_NONE][0]['machine'];
-//    $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
-//    $terms_array = taxonomy_get_tree($faq_categories->vid);
-//    $term_count = sizeof($terms_array);
-//    if(0 >= $term_count) {
-//      //Go to form
-//    }
-//
-//    sdpm($section);
-//    sdpm($get_array);
-//    sdpm($context);
-//    sdpm($node);
-//  }
-//  //check that there is a context
-//  //check that there is a query parameter
-//  //Test with no context or query parameter
-//}
-//
+function _viu_simple_faq_faq_add ($node) {
+  //Section ID is the Node ID
+  drupal_goto('/node/add/viu-simple-faq-question', array('query' => array('oa_section_ref' => $node->nid)));
+}
+
+/**
+ * Implements hook_node_prepare().
+ *
+ * @todo: attempted to get hook_prepare working but it would not get called
+ */
+function viu_simple_faq_node_prepare($node) {
+  $get_array = drupal_get_query_parameters();
+  $context = og_context();
+
+  //check node type
+  if (  'viu_simple_faq_question' == $node->type
+    && !empty($get_array)
+    && key_exists('oa_section_ref', $get_array)) {
+    $section = node_load($get_array['oa_section_ref']);
+    $section_machine_name = $section->field_url_name[LANGUAGE_NONE][0]['machine'];
+    $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
+    $terms_array = taxonomy_get_tree($faq_categories->vid);
+    $term_count = sizeof($terms_array);
+    if(0 >= $term_count) {
+      //Go to form
+    }
+
+    sdpm($section);
+    sdpm($get_array);
+    sdpm($context);
+    sdpm($node);
+  }
+  //check that there is a context
+  //check that there is a query parameter
+  //Test with no context or query parameter
+}
+
 /**
  * viu_simple_faq_term_warning form
  *  presents a warning message when user attempts to create a new faq node without creating terms first
@@ -197,18 +197,15 @@ function viu_simple_faq_term_warning_submit($form, $form_state) {
 /**
  * Access callback for managing FAQ node and term menu tabs
  *
+ * @param $node
  * @return bool
- *  TRUE if access is allowed
  */
-function _viu_simple_faq_access_callback($node) {
 function _viu_simple_faq_access_callback($node) {
   if (   'oa_section' == $node->type
       && property_exists($node, 'field_oa_section')
       && array_key_exists(LANGUAGE_NONE, $node->field_oa_section)
       && array_key_exists('0', $node->field_oa_section[LANGUAGE_NONE])){
-    $term = taxonomy_term_load($node->field_oa_section[LANGUAGE_NONE][0]['tid']);
-    return (   property_exists($term, 'uuid')
-        && VIU_SIMPLE_FAQ_SECTION_TERM_UUID == $term->uuid
+    return (   _viu_simple_faq_is_term_faq_section($node->field_oa_section[LANGUAGE_NONE][0]['tid'])
         && user_access('access viu_simple_faq administration'));
   } else return FALSE;
 }
@@ -265,6 +262,7 @@ function _viu_simple_faq_manage_categories($node) {
  *
  * @param $form_id
  * @param $vocabulary
+ * @return array|mixed
  */
 function _viu_simple_faq_get_term_form($form_id, $vocabulary) {
   $form = drupal_get_form($form_id, array(), $vocabulary);
@@ -280,6 +278,7 @@ function _viu_simple_faq_get_term_form($form_id, $vocabulary) {
  */
 function viu_simple_faq_entity_insert($entity, $type) {
   if ('node' == $type && 'oa_section' == $entity->type) {
+    //TODO This must be changed to get the UUID from the tid for the section page instead of the panelizer defaults (in case they change)
     if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
       //Gather information we need for the name of the new taxonomy vocabulary:
       if ($og_context = og_context()) {
@@ -417,9 +416,14 @@ function viu_simple_faq_entity_delete($entity, $type) {
   }
 }
 
-function _viu_simple_faq_is_faq_section_from_term($tid = NULL) {
-  if(NULL == $tid) {
-
-  }
-  taxonomy_term_load($tid);
+/**
+ * Helper function to determine if a term is a faq section
+ *
+ * @param $tid
+ * @return bool
+ */
+function _viu_simple_faq_is_term_faq_section ($tid) {
+  $term = taxonomy_term_load($tid);
+  return (   property_exists($term, 'uuid')
+          && VIU_SIMPLE_FAQ_SECTION_TERM_UUID == $term->uuid);
 }

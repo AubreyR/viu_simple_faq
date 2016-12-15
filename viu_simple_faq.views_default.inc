@@ -400,7 +400,6 @@ function viu_simple_faq_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['ui_name'] = 'Question';
   $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['text'] = '<h3 id="[nid]">[title]</h3>';
   $handler->display->display_options['fields']['title']['alter']['path'] = '#[nid]';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;

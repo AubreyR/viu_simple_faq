@@ -304,8 +304,8 @@ function viu_simple_faq_views_default_views() {
   $handler->display->display_options['pane_category']['name'] = 'Simple FAQ';
   $handler->display->display_options['pane_category']['weight'] = '0';
 
-  /* Display: FAQ Section Body */
-  $handler = $view->new_display('panel_pane', 'FAQ Section Body', 'panel_pane_2');
+  /* Display: FAQ Section Body (List) */
+  $handler = $view->new_display('panel_pane', 'FAQ Section Body (List)', 'panel_pane_2');
   $handler->display->display_options['display_description'] = 'Content Pane Body to be displayed on a FAQ section page';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
   $handler->display->display_options['style_plugin'] = 'default';
@@ -316,6 +316,71 @@ function viu_simple_faq_views_default_views() {
       'rendered_strip' => 0,
     ),
   );
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['label'] = '';
+  $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+  /* Field: Question */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['ui_name'] = 'Question';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['title']['alter']['text'] = '<h3 id="[nid]">[title]</h3>';
+  $handler->display->display_options['fields']['title']['alter']['path'] = '#[nid]';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+  /* Field: FAQ Categories */
+  $handler->display->display_options['fields']['og_vocabulary']['id'] = 'og_vocabulary';
+  $handler->display->display_options['fields']['og_vocabulary']['table'] = 'field_data_og_vocabulary';
+  $handler->display->display_options['fields']['og_vocabulary']['field'] = 'og_vocabulary';
+  $handler->display->display_options['fields']['og_vocabulary']['ui_name'] = 'FAQ Categories';
+  $handler->display->display_options['fields']['og_vocabulary']['label'] = '';
+  $handler->display->display_options['fields']['og_vocabulary']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['og_vocabulary']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['og_vocabulary']['alter']['text'] = '<h2>[og_vocabulary]</h2>';
+  $handler->display->display_options['fields']['og_vocabulary']['alter']['strip_tags'] = TRUE;
+  $handler->display->display_options['fields']['og_vocabulary']['alter']['preserve_tags'] = '<h2>';
+  $handler->display->display_options['fields']['og_vocabulary']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['og_vocabulary']['click_sort_column'] = 'target_id';
+  $handler->display->display_options['fields']['og_vocabulary']['settings'] = array(
+    'link' => 0,
+  );
+  /* Field: Content: Body */
+  $handler->display->display_options['fields']['body']['id'] = 'body';
+  $handler->display->display_options['fields']['body']['table'] = 'field_data_body';
+  $handler->display->display_options['fields']['body']['field'] = 'body';
+  $handler->display->display_options['fields']['body']['label'] = '';
+  $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['body']['element_default_classes'] = FALSE;
+  $handler->display->display_options['pane_category']['name'] = 'Simple FAQ';
+  $handler->display->display_options['pane_category']['weight'] = '0';
+
+  /* Display: FAQ Section Body (Accordion) */
+  $handler = $view->new_display('panel_pane', 'FAQ Section Body (Accordion)', 'panel_pane_3');
+  $handler->display->display_options['display_description'] = 'Content Pane Accordion to be displayed on a FAQ section page';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'views_bootstrap_accordion_plugin_style';
+  $handler->display->display_options['style_options']['grouping'] = array(
+    0 => array(
+      'field' => 'og_vocabulary',
+      'rendered' => 1,
+      'rendered_strip' => 0,
+    ),
+  );
+  $handler->display->display_options['style_options']['title_field'] = 'title';
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['row_plugin'] = 'fields';

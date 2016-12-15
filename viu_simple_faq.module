@@ -98,13 +98,25 @@ function viu_simple_faq_menu() {
     'file' => 'taxonomy.admin.inc',
   );
 
+  //Dependent on content admin view (cloned and featurized as part of Simple FAQ)
+  //TODO Double check the above is accurate
   $items['node/%node/content/add'] = array (
+    'title' => t('Create FAQ Item'),
+    'page callback' => '_viu_simple_faq_faq_add',
+    'page arguments' => array(1),
+    'access callback' => '_viu_simple_faq_content_access_callback',
+    'access arguments' => array(1),
+    'type'=> MENU_LOCAL_ACTION,
+  );
+
+  //WORKING HERE: Register a hidden menu path for the confirm form
+  $items['node/%node/content/term_warn'] = array (
     'title' => t('Create FAQ Item'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('viu_simple_faq_term_warning', 1),
     'access callback' => '_viu_simple_faq_content_access_callback',
     'access arguments' => array(1),
-    'type'=> MENU_LOCAL_ACTION,
+    'type'=> MENU_CALLBACK,
   );
 
   return $items;
@@ -118,11 +130,14 @@ function _viu_simple_faq_faq_add ($node) {
 /**
  * Implements hook_node_prepare().
  *
- * @todo: attempted to get hook_prepare working but it would not get called
+ * @todo: attempted to get hook_prepare (rather than hook_node_prepare) working but it would not get called
  */
 function viu_simple_faq_node_prepare($node) {
+  //WORKING HERE
   $get_array = drupal_get_query_parameters();
   $context = og_context();
+
+  //sdpm($node);
 
   //check node type
   if (  'viu_simple_faq_question' == $node->type
@@ -134,22 +149,16 @@ function viu_simple_faq_node_prepare($node) {
     $terms_array = taxonomy_get_tree($faq_categories->vid);
     $term_count = sizeof($terms_array);
     if(0 >= $term_count) {
-      //Go to form
+      drupal_goto('node/' . $section->nid . '/content/term_warn');
     }
-
-    sdpm($section);
-    sdpm($get_array);
-    sdpm($context);
-    sdpm($node);
   }
-  //check that there is a context
-  //check that there is a query parameter
-  //Test with no context or query parameter
 }
 
 /**
  * viu_simple_faq_term_warning form
  *  presents a warning message when user attempts to create a new faq node without creating terms first
+ *
+ * @todo: deprecated by above
  *
  * @param $form
  * @param $form_state
@@ -175,7 +184,7 @@ function viu_simple_faq_term_warning($form, $form_state, $node) {
       t('Cancel')
     );
   }
-  //No else statement because I want a catchall here
+  //Catchall (rather than else)
   //TODO not sure if a hard redirect is the correct way to do this
   drupal_goto('/node/add/viu-simple-faq-question', array('query' => array('oa_section_ref' => $node->nid)));
 }
@@ -418,6 +427,9 @@ function viu_simple_faq_entity_delete($entity, $type) {
 
 /**
  * Helper function to determine if a term is a faq section
+ *
+ * Takes a term id and then checks it's UUID to see if it belongs
+ *  to the "faq section" term in the "section types" vocabulary
  *
  * @param $tid
  * @return bool

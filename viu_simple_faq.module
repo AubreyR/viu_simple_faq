@@ -155,41 +155,6 @@ function viu_simple_faq_node_prepare($node) {
 }
 
 /**
- * viu_simple_faq_term_warning form
- *  presents a warning message when user attempts to create a new faq node without creating terms first
- *
- * @todo: deprecated by above
- *
- * @param $form
- * @param $form_state
- * @param $node
- * @return mixed
- */
-function viu_simple_faq_term_warning($form, $form_state, $node) {
-  //Test condition for empty categories here
-  $section_machine_name = $node->field_url_name[LANGUAGE_NONE][0]['machine'];
-  $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
-  $terms_array = taxonomy_get_tree($faq_categories->vid);
-  $term_count = sizeof($terms_array);
-  if(0 >= $term_count) {
-    //$node here is specific FAQ section node
-    $form['#node'] = $node;
-    //Provide entity id in the same for key as in the entity edit form (?)
-    $form['nid'] = array('#type' => 'value', '#value' => $node->nid);
-    return confirm_form($form,
-      t('No FAQ Categories to add item to!'),
-      'node/' . $node->nid,
-      t('Each question and answer must be associated to a FAQ category'),
-      t('Add Category'),
-      t('Cancel')
-    );
-  }
-  //Catchall (rather than else)
-  //TODO not sure if a hard redirect is the correct way to do this
-  drupal_goto('/node/add/viu-simple-faq-question', array('query' => array('oa_section_ref' => $node->nid)));
-}
-
-/**
  * viu_simple_faq_term_warning form submit handler
  *
  * @param $form

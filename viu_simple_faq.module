@@ -144,7 +144,7 @@ function viu_simple_faq_node_prepare($node) {
     && !empty($get_array)
     && key_exists('oa_section_ref', $get_array)) {
     $section = node_load($get_array['oa_section_ref']);
-    $section_machine_name = $section->field_url_name[LANGUAGE_NONE][0]['machine'];
+    $section_machine_name = $section->nid . "_section_faq";
     $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
     $terms_array = taxonomy_get_tree($faq_categories->vid);
     $term_count = sizeof($terms_array);
@@ -167,7 +167,7 @@ function viu_simple_faq_node_prepare($node) {
  */
 function viu_simple_faq_term_warning($form, $form_state, $node) {
   //Test condition for empty categories here
-  $section_machine_name = $node->field_url_name[LANGUAGE_NONE][0]['machine'];
+  $section_machine_name = $node->nid . "_section_faq";
   $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
   $terms_array = taxonomy_get_tree($faq_categories->vid);
   $term_count = sizeof($terms_array);
@@ -197,7 +197,7 @@ function viu_simple_faq_term_warning($form, $form_state, $node) {
  */
 function viu_simple_faq_term_warning_submit($form, $form_state) {
   $node = $form['#node'];
-  $section_machine_name = $node->field_url_name[LANGUAGE_NONE][0]['machine'];
+  $section_machine_name = $node->nid . "_section_faq";
   $faq_categories = taxonomy_vocabulary_machine_name_load($section_machine_name);
   //TODO default action: go to the add categories form (nothing else to do here)
   drupal_goto('node/' . $node->nid . '/faq_categories/' . $faq_categories->vid . '/add');
@@ -261,7 +261,7 @@ function _viu_simple_faq_manage_content($node) {
  *  The section machine name
  */
 function _viu_simple_faq_manage_categories($node) {
-  $vocabulary = taxonomy_vocabulary_machine_name_load($node->field_url_name[LANGUAGE_NONE][0]['machine']);
+  $vocabulary = taxonomy_vocabulary_machine_name_load($node->nid . "_section_faq");
   //load the admin view for that vocab
   drupal_goto(url('node/' . $node->nid . '/faq_categories/' . $vocabulary->vid));
 }
@@ -286,6 +286,8 @@ function _viu_simple_faq_get_term_form($form_id, $vocabulary) {
  * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
+  sdpm($entity);
+
   if ('node' == $type && 'oa_section' == $entity->type) {
     //TODO This must be changed to get the UUID from the tid for the section page instead of the panelizer defaults (in case they change)
     if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
@@ -302,7 +304,8 @@ function viu_simple_faq_entity_insert($entity, $type) {
       //TODO NOTE: this goes against typical taxonomy naming conventions because
       // taxonomy names typically have underscores instead of dashes (like node
       // machine names do).
-      $machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
+      //$machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
+      $machine_name = $entity->nid . "_section_faq";
 
       //Generate new vocabulary
       $vocabulary = (object) array(
@@ -417,8 +420,8 @@ function _viu_simple_faq_form_cancel(&$form, &$form_state) {
 function viu_simple_faq_entity_delete($entity, $type) {
   //Determine if we are deleting a FAQ Section:
   if ('node' == $type && 'oa_section' == $entity->type) {
-    if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
-      $machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
+    if (_viu_simple_faq_is_term_faq_section($entity->field_oa_section[LANGUAGE_NONE][0]['tid'])) {
+      $machine_name = $entity->nid . "_section_faq";
       $taxonomy = taxonomy_vocabulary_machine_name_load($machine_name);
       taxonomy_vocabulary_delete($taxonomy->vid);
     }

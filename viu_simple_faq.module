@@ -286,11 +286,8 @@ function _viu_simple_faq_get_term_form($form_id, $vocabulary) {
  * NOTE:  If you ever re-use this code, consider parameterizing it into a core helper function
  */
 function viu_simple_faq_entity_insert($entity, $type) {
-  sdpm($entity);
-
   if ('node' == $type && 'oa_section' == $entity->type) {
-    //TODO This must be changed to get the UUID from the tid for the section page instead of the panelizer defaults (in case they change)
-    if ('node:oa_section:simple_faq_section' == $entity->panelizer['page_manager']->name) {
+    if (_viu_simple_faq_is_term_faq_section($entity->field_oa_section[LANGUAGE_NONE][0]['tid'])) {
       //Gather information we need for the name of the new taxonomy vocabulary:
       if ($og_context = og_context()) {
         $group = node_load($og_context['gid']);
@@ -363,7 +360,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
  */
 function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $form_id) {
   if (array_key_exists('#node', $form) && 'oa_section' == $form['#node']->type) {
-    if ('node:oa_section:simple_faq_section' == $form['#node']->panelizer['page_manager']->name) {
+    if (_viu_simple_faq_is_term_faq_section($form['#node']->field_oa_section[LANGUAGE_NONE][0]['tid'])) {
       $form['description']['#markup'] = t('Are you sure you want to do this?  FAQ Categories will be destroyed and any remaining FAQ items will be orphaned!');
     }
   }

@@ -297,11 +297,7 @@ function viu_simple_faq_entity_insert($entity, $type) {
         return;
       }
 
-      //Get the machine name of the section being created
-      //TODO NOTE: this goes against typical taxonomy naming conventions because
-      // taxonomy names typically have underscores instead of dashes (like node
-      // machine names do).
-      //$machine_name = $entity->field_url_name[LANGUAGE_NONE][0]['machine'];
+      //Arbitrary naming convention for OG Vocabularies within FAQ sections:
       $machine_name = $entity->nid . "_section_faq";
 
       //Generate new vocabulary
@@ -371,6 +367,8 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
  */
 function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
   if ('viu_simple_faq_question_node_form' == $form_id ) {
+    sdpm($form);
+    sdpm($form_state);
     $form['actions']['cancel'] = array(
       '#type' => 'submit',
       '#value' => t('Cancel/Finish'),

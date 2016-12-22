@@ -137,8 +137,6 @@ function viu_simple_faq_node_prepare($node) {
   $get_array = drupal_get_query_parameters();
   $context = og_context();
 
-  //sdpm($node);
-
   //check node type
   if (  'viu_simple_faq_question' == $node->type
     && !empty($get_array)
@@ -333,10 +331,12 @@ function viu_simple_faq_entity_insert($entity, $type) {
       og_vocab_relation_save($vid, $og_vocab_relation['group_type'], $og_vocab_relation['gid']);
 
       //Simple FAQ content type-specific settings.
+      //TODO: These will need to be adjusted because validation shits the bed when we have multiple categories.
       $og_vocab_settings = array(
-        'required' => 1,
+        'required' => 0,
         'widget_type' => 'options_buttons',
-        'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+        //'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+        'cardinality' => 1,
       );
 
       //Generate OG Vocab Entity
@@ -367,8 +367,22 @@ function viu_simple_faq_form_node_delete_confirm_alter(&$form, &$form_state, $fo
  */
 function viu_simple_faq_form_alter(&$form, &$form_state, $form_id) {
   if ('viu_simple_faq_question_node_form' == $form_id ) {
-    sdpm($form);
-    sdpm($form_state);
+    foreach($form['og_vocabulary'][LANGUAGE_NONE][0] as $key => &$value) {
+      if (is_array($value) && array_key_exists('#field_name', $value) && 'og_vocabulary' == $value['#field_name']) {
+        //Grab a section number:
+        $taxonomy = taxonomy_vocabulary_load($key);
+        $section_id = preg_replace("/[^0-9]/", "", $taxonomy->machine_name);
+
+        //TODO make sure to append NOT replace the attributes key (safe)
+        $value['#attributes'] = array('data-section' => "$section_id");
+      }
+    }
+
+    $form['#attached']['js'] = array(
+      drupal_get_path('module', 'viu_simple_faq') . 'javascripts/viu_simple_faq.js'
+    );
+
+    //Override Cancel Button on forms (@todo this needs to be checked to make sure it's not firing on the wrong forms)
     $form['actions']['cancel'] = array(
       '#type' => 'submit',
       '#value' => t('Cancel/Finish'),

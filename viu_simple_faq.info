@@ -28,6 +28,7 @@ dependencies[] = uuid_features
 dependencies[] = views
 dependencies[] = views_bootstrap
 dependencies[] = views_content
+scripts[] = javascripts/viu_simple_faq.js
 stylesheets[all][] = stylesheets/viu_simple_faq.css
 features[command_button][] = viu_simple_faq_question
 features[ctools][] = field_group:field_group:1

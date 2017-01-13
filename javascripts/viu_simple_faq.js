@@ -1,40 +1,66 @@
 /**
+ * Custom form logic for FAQ Item Node Add form
+ *
+ * ASSUMES THIS SCRIPT WILL ONLY BE LOADED ON FAQ ITEM NODE EDIT FORM
+ *  Will interact dangerously with any other forms containing OG Vocabulary Elements
+ *
  * @file
  * Custom scripts for viu_simple_faq module.
  *
  */
 (function ($){
-    //Register plugin to hide a FAQ category block
-    $.fn.viu_simple_faqHideFormGroup = function() {
-        console.log($( this ).closest(".form-group"));
+    //Register plugin to toggle FAQ form block elements
+    //Run plugin on child elements of the "target" selector we want (or the element itself if no target is specified)
+    //to either action= "hide", "show", or toggle (blank)
+    $.fn.viu_simple_faqToggleFormElement = function( target, action ) {
+        if (target) {
+            if ( action == "show" ) {
+                $( this ).closest(target).show();
+            } else if ( action == "hide" ) {
+                $( this ).closest(target).hide();
+            } else {
+                $( this ).closest(target).toggle();
+            }
+        } else {
+            if ( action == "show" ) {
+                $( this ).show();
+            } else if ( action == "hide" ) {
+                $( this ).hide();
+            } else {
+                $( this ).toggle();
+            }
+        }
+        //TODO could use higher-order function to simplify the above code
         return this;
     };
 
-    //If none section nid == _none, then display all
-
-    //Define event handler for onchange of the OG Vocabs form
-
-    $(document).ready(function(){
-        console.log("hello");
+    //Reset the form
+    function resetForm(){
+        //Default selections for radio buttons (no value)
+        $( "input[name*='og_vocabulary'][value='_none']" ).prop('checked', true);
 
         //Hide all N/A value options
+        $( "input[name*='og_vocabulary'][value='_none']" ).viu_simple_faqToggleFormElement( "label", "hide" );
 
-        //Grab the current section name first from the dropdown list
-        var currentSectionID = $("#edit-oa-section-ref-und option:selected").val();
+        var currentSectionID = $("#edit-oa-section-ref-und").val();
 
-        //hide all form groups except for the one that's selected:
-        //Get all elements where data-section does not equal currentSectionID
-        //Consider corner case (where no FAQ section is selected at the start
-        var notCurrent = $("input:data(section)")
-                            .filter(function() {
-                                return $(this).data("section") == currentSectionID;
-                            });
+        //TODO the current two selectors could be optimized so that the second one is a subquery of the first
+        var current = $('input[data-section="' + currentSectionID + '"]');
+        var notCurrent = $('input:not([data-section="' + currentSectionID + '"])');
+        notCurrent.viu_simple_faqToggleFormElement(".form-group", "hide");
+        current.viu_simple_faqToggleFormElement(".form-group", "show");
 
-        console.log(notCurrent);
+        console.log(current);
 
-        //$("");
 
-        //register an event handler on the section dropdown (see above)
-        //when the dropdown is changed, hide all form groups except for the one that's selected
+        //TODO button logic for default selections
+    }
+
+    $(document).ready(function(){
+        resetForm();
+
+        //register an event handler on the section dropdown
+        //$("#edit-oa-section-ref-und").change(function () {console.log("poo")});
+        $("#edit-oa-section-ref-und").change(resetForm);
     });
 })(jQuery);
